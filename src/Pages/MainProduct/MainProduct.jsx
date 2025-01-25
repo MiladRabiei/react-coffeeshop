@@ -33,6 +33,7 @@ export default function MainProduct() {
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   // handling comment logic
+
   useEffect(()=>{
     setFetchLoading(true)
     fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`)
@@ -52,66 +53,58 @@ export default function MainProduct() {
     })
   },[])
 
-  let handleLike = (ID, like, dislike) => {
-    let productComments = JSON.parse(localStorage.getItem("cmInfo")) || [];
-    let commentInfo = productComments.find(
-      (item) => item.productID === params.ProductID && item.commentID === ID
+  const handleLike = (ID) => {
+    setFetchComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.id === ID) {
+          const isLiked = comment.liked;
+          const isDisliked = comment.disliked;
+  
+          return {
+            ...comment,
+            likecount: isLiked ? comment.likecount : comment.likecount + 1,
+            dislikecount: isDisliked ? comment.dislikecount - 1 : comment.dislikecount,
+            liked: !isLiked,
+            disliked: false,
+          };
+        }
+        return comment;
+      })
     );
-  
-    if (!commentInfo) {
-      // Add a new entry if none exists
-      productComments.push({ productID: params.ProductID, commentID: ID, liked: true, disliked: false });
-      setLikeCount(like + 1);
-      setDisLikeCount(dislike) // Increase like count
-    } else {
-      // Handle switching from dislike to like
-      if (commentInfo.disliked) {
-        setDisLikeCount(dislike - 1); // Decrease dislike count
-        setDisliked(false);
-        commentInfo.disliked = false;
-      }
-  
-      // Handle like logic
-      if (!commentInfo.liked) {
-        setLikeCount(like + 1); // Increase like count
-        commentInfo.liked = true;
-      } else {
-        console.log("You have already liked this comment.");
-      }
-    }
-  
-    localStorage.setItem("cmInfo", JSON.stringify(productComments));
-    setCmID(ID);
   };
   
+  const handleDisLike = (ID) => {
+    setFetchComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.id === ID) {
+          const isDisliked = comment.disliked;
+          const isLiked = comment.liked;
   
+          return {
+            ...comment,
+            dislikecount: isDisliked ? comment.dislikecount : comment.dislikecount + 1,
+            likecount: isLiked ? comment.likecount - 1 : comment.likecount,
+            disliked: !isDisliked,
+            liked: false,
+          };
+        }
+        return comment;
+      })
+    );
+  };
   
+  // Sync updates to the server
   useEffect(() => {
-    if (cmID) {
-      // Update the comments array in fetchComments
-      const updatedComments = fetchComments.map((item) =>
-        item.id === cmID
-          ? {
-              ...item,
-              likecount: likeCount,
-              dislikecount: disLikeCount,
-            }
-          : item
-      );
-  
-      setFetchComments(updatedComments); // Update UI immediately
-  
-      // Prepare the full updated product object
+    const timer = setTimeout(() => {
       const updatedProduct = {
-        ...mainProduct, // Keep all other product fields
-        comments: updatedComments, // Update only the comments field
+        ...mainProduct,
+        comments: fetchComments,
       };
   
-      // Sync with the server
       fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProduct), // Send the entire product object
+        body: JSON.stringify(updatedProduct),
       })
         .then((response) => {
           if (!response.ok) {
@@ -123,43 +116,10 @@ export default function MainProduct() {
           console.log("Product updated successfully:", data);
         })
         .catch((err) => console.error("Error updating product:", err));
-    }
-  }, [likeCount, disLikeCount, cmID]);
+    }, 500); 
   
-  
-
-
-  let handleDisLike = (ID, like, dislike) => {
-    let productComments = JSON.parse(localStorage.getItem("cmInfo")) || [];
-    let commentInfo = productComments.find(
-      (item) => item.productID === params.ProductID && item.commentID === ID
-    );
-  
-    if (!commentInfo) {
-      // Add a new entry if none exists
-      productComments.push({ productID: params.ProductID, commentID: ID, liked: false, disliked: true });
-      setDisLikeCount(dislike + 1); // Increase dislike count
-      setLikeCount(like)
-    } else {
-      // Handle switching from like to dislike
-      if (commentInfo.liked) {
-        setLikeCount(like - 1); // Decrease like count
-        setLiked(false);
-        commentInfo.liked = false;
-      }
-  
-      // Handle dislike logic
-      if (!commentInfo.disliked) {
-        setDisLikeCount(dislike + 1); // Increase dislike count
-        commentInfo.disliked = true;
-      } else {
-        console.log("You have already disliked this comment.");
-      }
-    }
-  
-    localStorage.setItem("cmInfo", JSON.stringify(productComments));
-    setCmID(ID);
-  };
+    return () => clearTimeout(timer); 
+  }, [fetchComments]);
   
   
   
@@ -507,38 +467,46 @@ export default function MainProduct() {
                   )}
                   
                 </div>
-                  {fetchLoading?(
-                    <CircleSpinner/>
+                  {fetchComments.length==0?(
+                    <div className='w-full lg:w-3/4 flex flex-col items-center gap-y-5'>
+                      <img className='w-40 h-40 text-white' src={import.meta.env.BASE_URL+`/images/comment-blank.svg`} alt="" />
+                      <p className=" font-MorabbaMedium text-3xl text-zinc-700 dark:text-white">هنوز دیدگاهی ثبت نشده است!</p>
+                    </div>
                   ):(
-                    <ul className='flex flex-col w-full lg:w-3/4 gap-y-2'>
-                    {fetchComments.length>0&&fetchComments.map(item=>(
-                    <>
-                      <Comment
-                      key={item.id}
-                      id={item.id}
-                      title={item.title}
-                      suggested={item.suggested}
-                      content={item.content}
-                      date={item.date}
-                      username={item.username}
-                      userID={item.userID}
-                      ProductID={item.ProductID}
-                      likecount={item.likecount}
-                      dislikecount={item.dislikecount}
-                      isapproved={item.isapproved}
-                      handleLike={handleLike}
-                      handleDisLike={handleDisLike}
-                      />
-                    </>
-                    ))}
-                      
-                      {fetchComments.length>3&&(
-                      <button className='flex-center gap-x-1 my-4 text-orange-300 font-DanaMedium'>
-                        مشاهده بیشتر ...
-                      </button>
-                      )}
-                    </ul>
+                    fetchLoading?(
+                      <CircleSpinner/>
+                    ):(
+                      <ul className='flex flex-col w-full lg:w-3/4 gap-y-2'>
+                      {fetchComments.length>0&&fetchComments.map(item=>(
+                      <>
+                        <Comment
+                        key={item.id}
+                        id={item.id}
+                        title={item.title}
+                        suggested={item.suggested}
+                        content={item.content}
+                        date={item.date}
+                        username={item.username}
+                        userID={item.userID}
+                        ProductID={item.ProductID}
+                        likecount={item.likecount}
+                        dislikecount={item.dislikecount}
+                        isapproved={item.isapproved}
+                        handleLike={handleLike}
+                        handleDisLike={handleDisLike}
+                        />
+                      </>
+                      ))}
+                        
+                        {fetchComments.length>3&&(
+                        <button className='flex-center gap-x-1 my-4 text-orange-300 font-DanaMedium'>
+                          مشاهده بیشتر ...
+                        </button>
+                        )}
+                      </ul>
+                    )
                   )}
+                  
                 
               </div>
             </div>
