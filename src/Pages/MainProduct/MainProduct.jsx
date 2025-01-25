@@ -14,7 +14,7 @@ import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
 export default function MainProduct() {
   let[count,setCount]=useState(1)
   let params = useParams()
-  let [mainData, setMainData] = useFetch("https://react-coffeeshop.onrender.com/products")
+  let [mainData, setMainData] = useFetch("https://react-coffeshop.onrender.com/products")
   let[fetchComments,setFetchComments]=useState([])
   let[fetchLoading,setFetchLoading]=useState(true)
   let[likeCount,setLikeCount]=useState(null)
@@ -35,7 +35,7 @@ export default function MainProduct() {
   // handling comment logic
   useEffect(()=>{
     setFetchLoading(true)
-    fetch(`https://react-coffeeshop.onrender.com/products/${params.ProductID}/`)
+    fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`)
     .then(res=>{
       if(!res.ok){
         throw new Error('couldnt get data')
@@ -108,7 +108,7 @@ export default function MainProduct() {
       };
   
       // Sync with the server
-      fetch(`https://react-coffeeshop.onrender.com/products/${params.ProductID}/`, {
+      fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct), // Send the entire product object

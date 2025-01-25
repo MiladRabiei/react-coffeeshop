@@ -20,7 +20,7 @@ export default function App() {
   let [nameCookie, setNameCookie] = useState("")
   let [shopBasket, setShopBasket] = useState([])
   let [isLoading, setIsLoading] = useState(true)
-  let [mainData,loading] = useFetch("https://react-coffeeshop.onrender.com/products")
+  let [mainData,loading] = useFetch("https://react-coffeshop.onrender.com/products")
   let login = (userInfo) => {
     let now = new Date()
     now.setTime(now.getTime() + 2 * 24 * 60 * 60 * 1000)

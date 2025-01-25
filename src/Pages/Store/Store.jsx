@@ -12,7 +12,7 @@ export default function Store() {
   const brandToggleRef = useRef(null)
   const coffeinToggleRef = useRef(null)
 
-  let [mainData,fetchLoading ] = useFetch("https://react-coffeeshop.onrender.com/products")
+  let [mainData,fetchLoading ] = useFetch("https://react-coffeshop.onrender.com/products")
   let [displayProduct, setDisplayProducts] = useState([])
   let [displayFilteredProducts, setDisplayFilteredProducts] = useState([])
   let [loading, setLoading] = useState(false)
