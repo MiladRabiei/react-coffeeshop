@@ -93,8 +93,8 @@ export default function MainProduct() {
         item.id === cmID
           ? {
               ...item,
-              likecount: likeCount>0?likeCount:item.likecount,
-              dislikecount: disLikeCount>0?disLikeCount:item.disLikeCount,
+              likecount: likeCount,
+              dislikecount: disLikeCount,
             }
           : item
       );
