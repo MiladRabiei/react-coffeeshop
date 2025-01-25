@@ -57,16 +57,27 @@ export default function MainProduct() {
     setFetchComments((prevComments) =>
       prevComments.map((comment) => {
         if (comment.id === ID) {
-          const isLiked = comment.liked;
-          const isDisliked = comment.disliked;
+          const userCommentStatus = JSON.parse(localStorage.getItem("userCommentStatus")) || {};
   
-          return {
-            ...comment,
-            likecount: isLiked ? comment.likecount : comment.likecount + 1,
-            dislikecount: isDisliked ? comment.dislikecount - 1 : comment.dislikecount,
-            liked: !isLiked,
-            disliked: false,
-          };
+          // Check if the user already liked or disliked
+          const hasLiked = userCommentStatus[ID]?.liked;
+          const hasDisliked = userCommentStatus[ID]?.disliked;
+  
+          // If the user already liked, do nothing
+          if (hasLiked) return comment;
+  
+          // If user disliked, undo dislike before liking
+          if (hasDisliked) {
+            comment.dislikecount -= 1;  // Decrease dislike count
+            userCommentStatus[ID].disliked = false;  // Remove dislike
+          }
+  
+          // Increase the like count
+          comment.likecount += 1;
+          userCommentStatus[ID] = { liked: true, disliked: false };
+  
+          localStorage.setItem("userCommentStatus", JSON.stringify(userCommentStatus)); // Update the status in local storage
+          return { ...comment, likecount: comment.likecount, dislikecount: comment.dislikecount };
         }
         return comment;
       })
@@ -77,16 +88,27 @@ export default function MainProduct() {
     setFetchComments((prevComments) =>
       prevComments.map((comment) => {
         if (comment.id === ID) {
-          const isDisliked = comment.disliked;
-          const isLiked = comment.liked;
+          const userCommentStatus = JSON.parse(localStorage.getItem("userCommentStatus")) || {};
   
-          return {
-            ...comment,
-            dislikecount: isDisliked ? comment.dislikecount : comment.dislikecount + 1,
-            likecount: isLiked ? comment.likecount - 1 : comment.likecount,
-            disliked: !isDisliked,
-            liked: false,
-          };
+          // Check if the user already liked or disliked
+          const hasLiked = userCommentStatus[ID]?.liked;
+          const hasDisliked = userCommentStatus[ID]?.disliked;
+  
+          // If the user already disliked, do nothing
+          if (hasDisliked) return comment;
+  
+          // If user liked, undo like before disliking
+          if (hasLiked) {
+            comment.likecount -= 1;  // Decrease like count
+            userCommentStatus[ID].liked = false;  // Remove like
+          }
+  
+          // Increase the dislike count
+          comment.dislikecount += 1;
+          userCommentStatus[ID] = { disliked: true, liked: false };
+  
+          localStorage.setItem("userCommentStatus", JSON.stringify(userCommentStatus)); // Update the status in local storage
+          return { ...comment, likecount: comment.likecount, dislikecount: comment.dislikecount };
         }
         return comment;
       })
