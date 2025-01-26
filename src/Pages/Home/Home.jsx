@@ -642,7 +642,7 @@ export default function Home() {
                 </div>
               </div>
               <div className='flex justify-between  items-center w-full'>
-                <div className='flex gap-x-1 lg:gap-x-3 xl:gap-x-5'>
+                <div className='flex gap-x-1 xs:gap-x-2 lg:gap-x-3 xl:gap-x-5'>
                   <div className='w-[72px] h-[72px] md:w-[98px] md:h-[98px] text-center text-emerald-600 bg-white py-1.5 md:pt-5 md:pb-1 rounded-2xl'>
                     <svg className='w-10 h-10 md:w-12 md:h-12 mb-1 md:mb-1.5 mx-auto'>
                       <use href='#activity'></use>
@@ -662,7 +662,7 @@ export default function Home() {
                     <span className='text-xs md:text-sm'>جایزه ها</span>
                   </div>
                 </div>
-                <div className='flex flex-col'>
+                <div className='flex flex-col px-2 xs:px-0'>
                   <span className='md:mb-1 font-DanaDemiBold text-2xl md:text-3xl'>542</span>
                   <span className=' text-xs md:text-sm'>امتیـــــــاز شما</span>
                   <NavLink className="flex justify-center items-center -mr-1.5 mt-1 md:mt-2  w-[90px] h-[26px] md:w-[110px] md:h-8 bg-gradient-to-r from-orange-200 to-orange-300 font-DanaMedium text-xs md:text-sm rounded-full">

@@ -491,8 +491,8 @@ export default function MainProduct() {
                 </div>
                   {fetchComments.length==0?(
                     <div className='w-full lg:w-3/4 flex flex-col items-center gap-y-5'>
-                      <img className='w-40 h-40 text-white' src={import.meta.env.BASE_URL+`/images/comment-blank.svg`} alt="" />
-                      <p className=" font-MorabbaMedium text-3xl text-zinc-700 dark:text-white">هنوز دیدگاهی ثبت نشده است!</p>
+                      <img className='w-30 h-30 lg:w-40 lg:h-40 text-white' src={import.meta.env.BASE_URL+`/images/comment-blank.svg`} alt="" />
+                      <p className=" font-MorabbaMedium text-2xl lg:text-3xl text-zinc-700 dark:text-white">هنوز دیدگاهی ثبت نشده است!</p>
                     </div>
                   ):(
                     fetchLoading?(
