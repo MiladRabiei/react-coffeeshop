@@ -117,16 +117,14 @@ export default function MainProduct() {
   
   // Sync updates to the server
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const updatedProduct = {
-        ...mainProduct,
-        comments: fetchComments,
-      };
+    if (!fetchComments) return;
+
+    const updatedComments = { comments: fetchComments };
   
       fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`, {
-        method: "PUT",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProduct),
+        body: JSON.stringify(updatedComments),
       })
         .then((response) => {
           if (!response.ok) {
@@ -138,9 +136,8 @@ export default function MainProduct() {
           console.log("Product updated successfully:", data);
         })
         .catch((err) => console.error("Error updating product:", err));
-    }, 500); 
+    
   
-    return () => clearTimeout(timer); 
   }, [fetchComments]);
   
   
@@ -313,7 +310,7 @@ export default function MainProduct() {
                     <svg className='w-5 h-5 text-green-600' onClick={()=>increaseCount(item.id)} >
                       <use href='#plus'></use>
                     </svg>
-                    <input type="number" id="customInput" value={item.ordercount} min={1} max={20} name="customInput" className='custome-input bg-transparent border-none outline-none text-center' />
+                    <input type="number" id="customInput" value={item.ordercount} min={1} max={20} name="customInput" readOnly className='custome-input bg-transparent border-none outline-none text-center' />
                     {item.ordercount<2?(
                       <svg className='w-5 h-5 text-red-500' onClick={()=>removeFromShopBox(item.id)}>
                       <use href='#trash'></use>
@@ -363,7 +360,7 @@ export default function MainProduct() {
                   <svg className='w-5 h-5 text-green-600' onClick={()=>setCount(count+1)}>
                     <use href='#plus'></use>
                   </svg>
-                  <input type="number" id="customInput" value={count} min={1} max={20} name="customInput" className='custome-input bg-transparent border-none outline-none text-center' />
+                  <input type="number" id="customInput" value={count} min={1} max={20} readOnly name="customInput" className='custome-input bg-transparent border-none outline-none text-center' />
                   {count<2?(
                       <svg className='w-5 h-5 text-red-500 opacity-5'>
                       <use href='#trash'></use>
@@ -432,7 +429,7 @@ export default function MainProduct() {
                   {authContext.isLoggedIn?(
                     <>
                     <p className='font-DanaMedium text-lg mb-2'> ثبت دیدگاه</p>
-                    <input type="text" placeholder='عنوان' className='tailwind-input outline-none border-none' name="" id="" />
+                    <input type="text" placeholder='عنوان' readOnly className='tailwind-input outline-none border-none' name="" id="" />
                     <p className='text-gray-500 dark:text-white text-sm mb-4'>این محصول را به دیگران پیشنهاد :</p>
                     <div className='w-full grid grid-cols-2 gap-4 mb-5 child:rounded-lg child:flex-center child:gap-x-2 child:py-2 child:shadow-normal child:font-DanaMedium child:delay-150'>
                       <button className='text-green-600 ring-transparent ring-1 focus:ring-green-600 dark:ring-white/20 dark:focus:ring-green-600'>

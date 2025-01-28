@@ -23,7 +23,7 @@ let routes = [
     { path: "/product-info/:ProductID", element: <MainProduct /> },
     { path: "/login", element: <LoginAndRegister /> },
     { path: "/register", element: <LoginAndRegister /> },
-    {path:"/cms",element:<PrivateRoute/>, children:[
+    {path:"/cms/*",element:<PrivateRoute/>, children:[
         {path:"",element:<Cms/>},
     ]},
     { path: "/forbidden", element: <Forbidden /> },
