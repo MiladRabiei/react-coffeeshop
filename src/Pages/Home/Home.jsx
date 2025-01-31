@@ -12,7 +12,7 @@ import useFetch from '../../hooks/useFetch';
 import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
 
 export default function Home() {
-  let [mainData,loading] = useFetch("https://react-coffeshop.onrender.com/products")
+  let [mainData,loading] = useFetch("https://react-coffeshop.liara.run/products")
   let [products, setProducts] = useState([])
   let [randomNumbers, setRandomNumbers] = useState([])
   const nextButtonRef = useRef(null);

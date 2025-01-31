@@ -5,11 +5,56 @@ import { Link } from 'react-router-dom'
 
 export default function Shop() {
   let authContext=useContext(AuthContext)
-  console.log(authContext);
   let removeFromShopBox=(id)=>authContext.removefromshopbox(id)
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   let emptyShopBox=()=>authContext.emptyshopbox()
+  console.log(crypto.randomUUID().slice(-6));
+  
+  const addOrderstoDB = async () => {
+    let order = authContext.shopBasket.map(item => ({
+      ...item,
+      status: "waiting",
+      orderID: crypto.randomUUID().slice(-3) + Date.now().toString().slice(-3)
+    }));
+    
+    let updatedProducts = [...authContext.userInfos.orders]; // Start with the existing orders array
+    console.log(updatedProducts);
+    order.forEach(product => {
+      const existsInOrders = updatedProducts.some(item => item.orderID === product.orderID);
+    
+      if (!existsInOrders) {
+        updatedProducts.push(product);
+      } else {
+        updatedProducts = updatedProducts.map(item => {
+          if (item.orderID === product.orderID && item.status !== product.status) {
+            return item; 
+          }
+          return item;
+        });
+      }
+    });
+ 
+    try {
+      const response = await fetch(`https://react-coffeshop.liara.run/users/${authContext.userInfos.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orders: updatedProducts })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to update orders: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log("Orders updated successfully:", data);
+      authContext.setUserInfos(prev => ({ ...prev, orders: data.orders }));
+
+    } catch (error) {
+      console.error("Error updating orders:", error);
+    }
+  };
+  
   return (
     <section className="shop mt-8 md:mt-40">
       <div className="container">
@@ -163,12 +208,22 @@ export default function Shop() {
             <span>تومان</span>
           </div>
         </div>
-        <button className='flex-center gap-x-1 bg-orange-300 text-white rounded-lg py-2 hover:bg-orange-400 delay-75'>
+        {authContext.isLoggedIn?(
+          <button onClick={addOrderstoDB}  className='flex-center gap-x-1 bg-orange-300 text-white rounded-lg py-2 hover:bg-orange-400 delay-75'>
           ثبت سفارش
           <svg className='w-5 h-5'>
             <use href='#bag'></use>
           </svg>
         </button>
+        ):(
+          <Link to={"/Login"}   className='flex-center gap-x-1 bg-orange-300 text-white rounded-lg py-2 hover:bg-orange-400 delay-75'>
+          ورود به حساب کاربری 
+          <svg className='w-5 h-5'>
+            <use href='#bag'></use>
+          </svg>
+        </Link>
+        )
+        }
         </div>
         ):(
       authContext.isLoggedIn?(
@@ -217,7 +272,7 @@ export default function Shop() {
                 <span>تومان</span>
               </div>
             </div>
-            <button className='flex-center gap-x-1 bg-orange-300 text-white rounded-lg py-2 hover:bg-orange-400 delay-75'>
+            <button onClick={addOrderstoDB}  className='flex-center gap-x-1 bg-orange-300 text-white rounded-lg py-2 hover:bg-orange-400 delay-75'>
               ثبت سفارش
               <svg className='w-5 h-5'>
                 <use href='#bag'></use>

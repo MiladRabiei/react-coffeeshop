@@ -14,7 +14,7 @@ import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
 export default function MainProduct() {
   let[count,setCount]=useState(1)
   let params = useParams()
-  let [mainData, setMainData] = useFetch("https://react-coffeshop.onrender.com/products")
+  let [mainData, setMainData] = useFetch("https://react-coffeshop.liara.run/products")
   let[fetchComments,setFetchComments]=useState([])
   let[fetchLoading,setFetchLoading]=useState(true)
   let[likeCount,setLikeCount]=useState(null)
@@ -36,7 +36,7 @@ export default function MainProduct() {
 
   useEffect(()=>{
     setFetchLoading(true)
-    fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`)
+    fetch(`https://react-coffeshop.liara.run/products/${params.ProductID}/`)
     .then(res=>{
       if(!res.ok){
         throw new Error('couldnt get data')
@@ -121,7 +121,7 @@ export default function MainProduct() {
 
     const updatedComments = { comments: fetchComments };
   
-      fetch(`https://react-coffeshop.onrender.com/products/${params.ProductID}/`, {
+      fetch(`https://react-coffeshop.liara.run/products/${params.ProductID}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedComments),

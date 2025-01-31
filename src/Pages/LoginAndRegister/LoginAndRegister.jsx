@@ -27,7 +27,7 @@ export default function LoginAndRegister() {
     number:{value:"",isValid:false},
     password:{value:"",isValid:false},
   },false)
-  let [mainData,setMainData]=useFetch("https://react-coffeshop.onrender.com/users")
+  let [mainData,setMainData]=useFetch("https://react-coffeshop.liara.run/users")
 
 
   let userLogin=event=>{
@@ -62,7 +62,7 @@ export default function LoginAndRegister() {
     return item.email!==newUserInfo.email
   })
   if(isNonExist){
-    fetch("https://react-coffeshop.onrender.com/users",{
+    fetch("https://react-coffeshop.liara.run/users",{
       method:"POST",
       headers:{
         "Content-Type":"application/json"

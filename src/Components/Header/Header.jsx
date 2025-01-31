@@ -282,7 +282,7 @@ export default function Header() {
                     </>
                 ) : (
                     <div className="group ">
-                        <Link to={"#"} className="relative  py-3 flex items-center gap-x-2.5 tracking-tightest " >
+                        <Link to={"/userpanel/dashboard"} className="relative  py-3 flex items-center gap-x-2.5 tracking-tightest " >
                             <svg className='w-8 h-8'>
                                 <use xlinkHref='#person'></use>
                             </svg>
@@ -294,19 +294,19 @@ export default function Header() {
                     bg-white dark:bg-zinc-700 shadow-normal rounded-2xl
                         '>
                             <div className='child:py-2 child:pr-2 border-b border-white/10 pb-3 child:text-zinc-700 child:dark:text-white child-hover:bg-orange-200/20 child-hover:dark:text-orange-300 child:rounded-md'>
-                                <Link className='flex items-center text-base gap-x-2.5'>
+                                <Link to={"/userpanel/orders"} className='flex items-center text-base gap-x-2.5'>
                                     <svg className='md:w-5 md:h-5'>
                                         <use href='#bag'></use>
                                     </svg>
                                     سفارشات من
                                 </Link>
-                                <Link className='flex items-center text-base gap-x-2.5'>
+                                <Link to={"/userpanel/comments"} className='flex items-center text-base gap-x-2.5'>
                                     <svg className=' md:w-6 md:h-6'>
                                         <use href='#envelope'></use>
                                     </svg>
                                     لیست پیام ها
                                 </Link>
-                                <Link className='flex items-center text-base gap-x-2.5'>
+                                <Link to={"/userpanel/settings"} className='flex items-center text-base gap-x-2.5'>
                                     <svg className=' md:w-6 md:h-6'>
                                         <use href='#settings'></use>
                                     </svg>
@@ -454,13 +454,20 @@ export default function Header() {
                     </ul>
                     {/* nav-footer */}
                     <div className="py-8 mt-6 space-y-6 px-2.5 border-t border-t-gray-100 dark:border-t-white/10  text-orange-300">
-                        {!authContext.isLoggedIn && (
+                        {!authContext.isLoggedIn?(
                             <NavLink to={"/Login"} className="inline-flex items-center gap-x-2">
                                 <svg className='w-5 h-5'>
                                     <use href='#arrow-right'></use>
                                 </svg>
                                 ورود | ثبت نام
                             </NavLink>
+                        ):(
+                            <NavLink to={"/userpanel/dashboard"} className="inline-flex items-center gap-x-2 " >
+                            <svg className='w-5 h-5'>
+                                <use xlinkHref='#person'></use>
+                            </svg>
+                            <span className='inline-block font-DanaMedium'>{authContext.nameCookie}</span>
+                        </NavLink>
                         )}
                         <div>
                             <span className="inline-flex  items-center gap-x-2 dark:hidden cursor-pointer" onClick={changeThemeColor}>

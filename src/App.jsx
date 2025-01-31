@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Header from './Components/Header/Header'
 import Footer from "./Components/Footer/Footer"
-import { Routes, Route, useRoutes, useLocation,HashRouter } from "react-router-dom"
+import { Routes, Route, useRoutes, useLocation, HashRouter } from "react-router-dom"
 import routes from './Routes'
 import AuthContext from './Context/AuthContext'
 import useFetch from './hooks/useFetch'
@@ -11,6 +11,7 @@ export default function App() {
   let location = useLocation()
   const isCmsPage = location.pathname.toLowerCase() === "/cms";
   const is403Page = location.pathname.toLowerCase() === "/forbidden";
+  const isUserPanel = location.pathname.toLowerCase() === "/userpanel" || location.pathname.toLowerCase().includes("/userpanel/")
 
   // console.log(location);
   // console.log(isHomePage); 
@@ -20,7 +21,7 @@ export default function App() {
   let [nameCookie, setNameCookie] = useState("")
   let [shopBasket, setShopBasket] = useState([])
   let [isLoading, setIsLoading] = useState(true)
-  let [mainData,loading] = useFetch("https://react-coffeshop.onrender.com/products")
+  let [mainData, loading] = useFetch("https://react-coffeshop.liara.run/products")
   let login = (userInfo) => {
     let now = new Date()
     now.setTime(now.getTime() + 2 * 24 * 60 * 60 * 1000)
@@ -33,6 +34,30 @@ export default function App() {
     localStorage.setItem('userInfo', JSON.stringify(userInfo))
     setUserInfos(userInfo)
   }
+  useEffect(()=>{
+    if(isLoggedIn){
+      let userInfo=JSON.parse(localStorage.getItem('userInfo'))||[]
+      console.log(userInfo);
+      try{
+        fetch(`https://react-coffeshop.liara.run/users/${userInfo?.id}`)
+        .then(res=>{
+          if(!res.ok){
+            console.log("failed to get datas");
+          }
+          return res.json()
+        })
+        .then(data=>{
+          setUserInfos(data)
+          localStorage.setItem('userInfo',JSON.stringify(data))
+        })
+
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+  },[isLoggedIn])
+
   useEffect(() => {
     let cookie = document.cookie
     let mainCookie = cookie.slice(cookie.indexOf('=') + 1)
@@ -45,7 +70,7 @@ export default function App() {
     setIsLoading(false)
   }, []);
 
-  let addtoshopbox = (productID,order=0) => {
+  let addtoshopbox = (productID, order = 0) => {
     let shopbox = JSON.parse(localStorage.getItem('shopbox')) || []
     let mainProduct = mainData.find(item => item.id === productID)
 
@@ -54,13 +79,13 @@ export default function App() {
       existingProduct.ordercount = order > 0 ? order : existingProduct.ordercount + 1;
     } else {
       if (mainProduct.count > 0) {
-        shopbox.push({ ...mainProduct, ordercount:order>0?order:1 })
+        shopbox.push({ ...mainProduct, ordercount: order > 0 ? order : 1 })
       }
     }
     localStorage.setItem('shopbox', JSON.stringify(shopbox))
     setShopBasket([...shopbox])
   }
-  
+
   useEffect(() => {
     let shopBasket = JSON.parse(localStorage.getItem('shopbox'))
     setShopBasket(shopBasket)
@@ -109,7 +134,7 @@ export default function App() {
     localStorage.setItem('shopbox', JSON.stringify(shopbox))
     setShopBasket(shopbox)
   }
-
+  console.log(isLoggedIn);
   return (
     <>
       <AuthContext.Provider
@@ -117,6 +142,7 @@ export default function App() {
           isLoggedIn,
           isLoading,
           userInfos,
+          setUserInfos,
           nameCookie,
           shopBasket,
           login,
@@ -304,16 +330,42 @@ export default function App() {
             <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clipRule="evenodd" />
             <path fillRule="evenodd" d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z" clipRule="evenodd" />
           </symbol>
+          <symbol id='adjustments-horizontal' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5">
+            <path d="M10 3.75a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM17.25 4.5a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM5 3.75a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM4.25 17a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM17.25 17a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM9 10a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1 0-1.5h5.5A.75.75 0 0 1 9 10ZM17.25 10.75a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM14 10a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM10 16.25a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+          </symbol>
+          <symbol id='squares' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+          </symbol>
+          <symbol id='map' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+          </symbol>
+          <symbol id='wallet' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+          </symbol>
+          <symbol id='check' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </symbol>
+          <symbol id='ellipsis' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </symbol>
+          <symbol id='x-circle' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </symbol>
+          <symbol id='clock' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </symbol>
+
 
 
 
         </svg>
         <div>
-          {(!isCmsPage && !is403Page) && <Header />}
+          {(!isCmsPage && !is403Page && !isUserPanel) && <Header />}
 
-          {Router } {/* Render the routes */}
+          {Router} {/* Render the routes */}
 
-          {(!isCmsPage && !is403Page) && <Footer />}
+          {(!isCmsPage && !is403Page && !isUserPanel) && <Footer />}
         </div>
       </AuthContext.Provider>
     </>
