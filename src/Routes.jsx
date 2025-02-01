@@ -35,7 +35,7 @@ let routes = [
     {path:"/cms/*",element:<PrivateRoute/>, children:[
         {path:"",element:<Cms/>},
     ]},
-    {path:"/userpanel/*",element:<UserPanel/>,children:[
+    {path:"/userpanel/",element:<UserPanel/>,children:[
         {path:"dashboard",element:<Dashboard/>},
         {path:"orders",element:<Orders/>},
         {path:"favourits",element:<Favourits/>},

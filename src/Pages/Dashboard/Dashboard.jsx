@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { Link,Navigate } from 'react-router-dom'
 import AuthContext from '../../Context/AuthContext'
-
 export default function Dashboard() {
   let authcontext=useContext(AuthContext)
 
@@ -72,7 +71,7 @@ export default function Dashboard() {
             </svg>
             در انتظار بررسی
           </span>
-          <span className='flex-center w-10 h-10 bg-sky-500 text-white rounded-full'>{authcontext.shopBasket.length}</span>
+          <span className='flex-center w-10 h-10 bg-sky-500 text-white rounded-full'>{authcontext.shopBasket?authcontext.shopBasket.length:0}</span>
         </div>
         <div className=''>
           <span className='flex items-center w-30 min-h-[60px] gap-x-1'>
@@ -165,43 +164,36 @@ export default function Dashboard() {
       </div>
       <div className='flex flex-col w-full h-full   md:max-h-[260px] gap-y-4 justify-start'>
         <p>سفارش های اخیر من :</p>
-        <div className="flex h-[236px] overflow-y-auto  py-2 px-2 rounded-lg bg-white shadow-normal">
+        <div className="flex h-[236px] overflow-y-auto overflow-x-hidden  py-2 px-2 rounded-lg bg-white shadow-normal">
           <table className='w-full'>
-            <thead className='bg-white text-sm border-b sticky -top-2 z-10'>
-              <tr className='child:p-2 child:text-right'>
+            <thead className='w-full bg-white text-sm border-b sticky -top-2 z-10'>
+              <tr className=' child:p-2 child:text-right flex  child:flex-grow child:w-20 '>
                 <th>نام محصول</th>
                 <th>تاریخ</th>
                 <th>قیمت</th>
                 <th>وضعیت</th>
               </tr>
             </thead>
-            <tbody className='divide-y text-sm '>
-              <tr className='child:text-right child:p-2'>
-                <td className='line-clamp-3'>قهوه 200 گرمی بن مانو</td>
-                <td>1402/11/11</td>
-                <td>42,000 تومان</td>
-                <td className='text-red-500'>لغو شده</td>
+            <tbody className='divide-y text-sm  '>
+              {authcontext.userInfos.orders.length>0&&authcontext.userInfos.orders.map(item=>(
+                <>
+                <tr key={item.id} className='child:text-right child:p-2 flex child:flex-grow child:w-20 '>
+                <td className='line-clamp-2   overflow-y-hidden'>{item.name}</td>
+                <td>{item.orderTime&&item.orderTime}</td>
+                <td>{item.price} تومان</td>
+                {item.status==="cancel"?(
+
+                  <td className='text-red-500'>لغو شده</td>
+                ):item.status==="waiting"?(
+                  <td className='text-amber-500'>درانتظار پرداخت</td>
+
+                ):item.status==="paid"?(
+                  <td className='text-emerald-500'>پرداخت شده</td>
+
+                ):(null)}
               </tr>
-              <tr className='child:text-right child:p-2'>
-                <td>قهوه 200 گرمی بن مانو</td>
-                <td>1402/11/11</td>
-                <td>42,000 تومان</td>
-                <td className='text-amber-500'>درانتظار پرداخت</td>
-              </tr>
-              <tr className='child:text-right child:p-2'>
-                <td>قهوه 200 گرمی بن مانو</td>
-                <td>1402/11/11</td>
-                <td>42,000 تومان</td>
-                <td className='text-emerald-500'>پرداخت شده</td>
-              </tr>
-              <tr className='child:text-right child:p-2'>
-                <td>قهوه 200 گرمی بن مانو</td>
-                <td>1402/11/11</td>
-                <td>42,000 تومان</td>
-                <td>لغو شده</td>
-              </tr>
-              
-              
+                </>
+              ))}
             </tbody>
           </table>
         </div>

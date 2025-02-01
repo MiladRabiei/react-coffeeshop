@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb'
 import AuthContext from '../../Context/AuthContext'
 import { Link } from 'react-router-dom'
+import moment from 'jalali-moment'
 
 export default function Shop() {
   let authContext=useContext(AuthContext)
@@ -9,13 +10,14 @@ export default function Shop() {
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   let emptyShopBox=()=>authContext.emptyshopbox()
-  console.log(crypto.randomUUID().slice(-6));
+  const jalaliTextDate = moment().locale("fa").format(" jD/jM/jYYYY");
   
   const addOrderstoDB = async () => {
     let order = authContext.shopBasket.map(item => ({
       ...item,
       status: "waiting",
-      orderID: crypto.randomUUID().slice(-3) + Date.now().toString().slice(-3)
+      orderID: crypto.randomUUID().slice(-3) + Date.now().toString().slice(-3),
+      orderTime:jalaliTextDate
     }));
     
     let updatedProducts = [...authContext.userInfos.orders]; // Start with the existing orders array
