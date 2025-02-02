@@ -10,8 +10,7 @@ export default function Shop() {
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   let emptyShopBox=()=>authContext.emptyshopbox()
-  const jalaliTextDate = moment().locale("fa").format(" jD/jM/jYYYY");
-  
+  const jalaliTextDate = moment().locale("fa").format(" jYYYY/jM/jD");
   const addOrderstoDB = async () => {
     let order = authContext.shopBasket.map(item => ({
       ...item,

@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import moment from "jalali-moment";
+import AuthContext from '../../Context/AuthContext';
 
 export default function UserPanel() {
-
+    let authcontext=useContext(AuthContext)
     let mobileMenuElem=useRef()
     let overlayElem=useRef()
     let openMobileMenu=()=>{
@@ -110,7 +111,7 @@ export default function UserPanel() {
                                 </svg>
                                 <div className='flex h-full  items-center gap-x-2'>
                                     <span className='text-sm xs:text-base'>
-                                        میلاد ربیعی
+                                         {authcontext.userInfos.username}
                                     </span>
                                     <span className="hidden xs:block w-px h-10 bg-orange-300"></span>
                                     <span className='hidden xs:block'>مشتری</span>

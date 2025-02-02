@@ -19,8 +19,8 @@ let inputReducer=(state,action)=>{
 }
 export default function Input(props) {
     let[mainInput,dispatch]=useReducer(inputReducer,{
-        value:'',
-        isValid:false
+        value:props.value?props.value:"",
+        isValid:props.value?validator(props.value,props.validations):false
     })
     let {value,isValid}=mainInput
     let {onInputHandler,id}=props
@@ -40,7 +40,7 @@ export default function Input(props) {
         <input
          type={props.type}
          placeholder={props.placeholder}
-         className={`${props.className} ${mainInput.value.length===0?"border-transparent":mainInput.isValid?" border-emerald-500":" border-red-500"}`}
+         className={`${props.className+" text-zinc-700"} ${mainInput.value.length===0?"border-transparent":mainInput.isValid?" border-emerald-500":" border-red-500"}`}
          value={mainInput.value}
          onChange={(event)=>{
             if(props.type==="password"){
@@ -53,7 +53,7 @@ export default function Input(props) {
         <textarea
         placeholder={props.placeholder}
         className={props.className}
-        onChange={ChangeHandler}
+        onChange={changeHandler}
         value={mainInput.value}
         name="" id=""></textarea>
     )

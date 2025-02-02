@@ -15,10 +15,12 @@ export default function Dashboard() {
     return item.status==="waiting"
   })||[]
   let canceledProductsToBuy=authcontext.userInfos.orders?.filter(item=>{
-    return item.status==="canceled"
+    return item.status==="cancel"
   })||[]
+
   return (
-    <div >
+    <section className="dashboard">
+      <div className='container' >
       {/* order info */}
       <div className="flex flex-col h-full flex-wrap  xl:flex-row xl:items-center gap-y-4 gap-x-4">
       <div className='flex flex-col w-full h-auto  md:max-h-[260px] gap-y-4 justify-start'>
@@ -83,12 +85,21 @@ export default function Dashboard() {
           <span className='flex-center w-10 h-10 bg-red-500 text-white rounded-full'>{canceledProductsToBuy.length}</span>
         </div>
         <div className=''>
-          <span className='flex items-center w-30 min-h-[60px] gap-x-1'>
+          {waitingForPay.length>0?(
+            <Link to={"/checkout"} className='flex items-center w-30 min-h-[60px] gap-x-1'>
+            <svg className='w-5 h-5 text-violet-500'>
+              <use href='#wallet'></use>
+            </svg>
+             منتظر پرداخت
+          </Link>
+          ):(
+            <span className='flex items-center w-30 min-h-[60px] gap-x-1'>
             <svg className='w-5 h-5 text-violet-500'>
               <use href='#wallet'></use>
             </svg>
              منتظر پرداخت
           </span>
+          )}
           <span className='flex-center w-10 h-10 bg-violet-500 text-white rounded-full'>{waitingForPay.length}</span>
         </div>
         <div className=''>
@@ -177,8 +188,13 @@ export default function Dashboard() {
             <tbody className='divide-y text-sm  '>
               {authcontext.userInfos.orders.length>0&&authcontext.userInfos.orders.map(item=>(
                 <>
-                <tr key={item.id} className='child:text-right child:p-2 flex child:flex-grow child:w-20 '>
-                <td className='line-clamp-2   overflow-y-hidden'>{item.name}</td>
+                <tr key={item.id} className='child:text-right child:p-2 flex  items-center child:flex-grow child:w-20 '>
+                <td className=''>
+                  <div className="line-clamp-2   ">
+                  {item.name}
+
+                  </div>
+                </td>
                 <td>{item.orderTime&&item.orderTime}</td>
                 <td>{item.price} تومان</td>
                 {item.status==="cancel"?(
@@ -200,6 +216,8 @@ export default function Dashboard() {
       </div>
       </div>
     </div>
+    </section>
+    
     
   )
 }

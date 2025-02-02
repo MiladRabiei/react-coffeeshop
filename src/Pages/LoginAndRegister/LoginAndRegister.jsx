@@ -29,7 +29,7 @@ export default function LoginAndRegister() {
   },false)
   let [mainData,setMainData]=useFetch("https://react-coffeshop.liara.run/users")
 
-
+console.log(formRegisterState);
   let userLogin=event=>{
     event.preventDefault()
     let userInfo=mainData.filter(item=>{
@@ -241,7 +241,7 @@ export default function LoginAndRegister() {
                   elem="input"
                   placeholder=' شماره تماس'
                   className='w-full border-2 rounded-lg bg-white h-full pr-2  outline-none'
-                  type="text"
+                  type="number"
                   id="number"
                   onInputHandler={formInputHandler}
                   validations={[
@@ -282,7 +282,7 @@ export default function LoginAndRegister() {
                 
                 <Button className={`" text-white h-12 rounded-lg" ${formRegisterState.isFormValid?"bg-orange-300 hover:bg-orange-400 rounded-lg":"bg-gray-400 rounded-lg"}`}
                 type="submit"
-                disabled={!formState.isFormValid}
+                disabled={!formRegisterState.isFormValid}
                 onClick={userRegister}
                 >
                   ثبت نام
