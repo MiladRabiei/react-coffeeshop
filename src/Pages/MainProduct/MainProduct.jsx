@@ -29,17 +29,16 @@ export default function MainProduct() {
 
 // handling shopbasket
   
-  let mainProduct = mainData.find(item => item.id=== params.ProductID.trim())
-  let product=mainData.filter(item=>item.id===params.ProductID.trim())
-  let productInBasket =authContext.shopBasket&& authContext.shopBasket.filter(item => item.id === +params.ProductID)
-  let isInShopBasket=authContext.shopBasket&&authContext.shopBasket.some(item=>item.id=== +params.ProductID)
+  let mainProduct = mainData.find(item => +item.id=== +params.ProductID.trim())
+  let product=mainData.filter(item=>+item.id===+params.ProductID.trim())
+  let productInBasket =authContext.shopBasket&& authContext.shopBasket.filter(item => +item.id == +params.ProductID)
+  let isInShopBasket=authContext.shopBasket&&authContext.shopBasket.some(item=>+item.id== +params.ProductID)
   let addToShopBasket=(id,ordercount)=>authContext.addtoshopbox(id,ordercount)
   let removeFromShopBox=(id)=>authContext.removefromshopbox(id)
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   // handling comment logic
-console.log(isInShopBasket);
-console.log(productInBasket);
+
   useEffect(()=>{
     setFetchLoading(true)
     fetch(`https://react-coffeshop.liara.run/products/${params.ProductID}/`)
