@@ -11,7 +11,10 @@ import AuthContext from '../../Context/AuthContext';
 import useFetch from '../../hooks/useFetch';
 import Comment from '../../Components/Comment/Comment';
 import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
+
 export default function MainProduct() {
+  let authContext = useContext(AuthContext)
+
   let[count,setCount]=useState(1)
   let params = useParams()
   let [mainData, setMainData] = useFetch("https://react-coffeshop.liara.run/products")
@@ -22,18 +25,21 @@ export default function MainProduct() {
   let[disLikeCount,setDisLikeCount]=useState(null)
   let[disLiked,setDisliked]=useState(false)
   let[cmID,setCmID]=useState()
+
+
 // handling shopbasket
-  let authContext = useContext(AuthContext)
+  
   let mainProduct = mainData.find(item => item.id=== params.ProductID.trim())
   let product=mainData.filter(item=>item.id===params.ProductID.trim())
-  let productInBasket =authContext.shopBasket&& authContext.shopBasket.filter(item => item.id === params.ProductID.trim())
-  let isInShopBasket=authContext.shopBasket&&authContext.shopBasket.some(item=>item.id===params.ProductID.trim())
+  let productInBasket =authContext.shopBasket&& authContext.shopBasket.filter(item => item.id === +params.ProductID)
+  let isInShopBasket=authContext.shopBasket&&authContext.shopBasket.some(item=>item.id=== +params.ProductID)
   let addToShopBasket=(id,ordercount)=>authContext.addtoshopbox(id,ordercount)
   let removeFromShopBox=(id)=>authContext.removefromshopbox(id)
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   // handling comment logic
-
+console.log(isInShopBasket);
+console.log(productInBasket);
   useEffect(()=>{
     setFetchLoading(true)
     fetch(`https://react-coffeshop.liara.run/products/${params.ProductID}/`)
@@ -141,7 +147,7 @@ export default function MainProduct() {
   }, [fetchComments]);
   
   
-  
+
 
   return (
     <>

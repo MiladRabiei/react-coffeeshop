@@ -87,8 +87,10 @@ export default function App() {
   }
 
   useEffect(() => {
+    setIsLoading(true)
     let shopBasket = JSON.parse(localStorage.getItem('shopbox'))
     setShopBasket(shopBasket)
+    setIsLoading(false)
   }, [])
 
   let removefromshopbox = (id) => {
