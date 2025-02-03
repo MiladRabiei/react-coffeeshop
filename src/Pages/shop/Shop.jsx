@@ -3,6 +3,7 @@ import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb'
 import AuthContext from '../../Context/AuthContext'
 import { Link } from 'react-router-dom'
 import moment from 'jalali-moment'
+import apiRequests from '../../services/axios/Configs/configs'
 
 export default function Shop() {
   let authContext=useContext(AuthContext)
@@ -37,17 +38,15 @@ export default function Shop() {
     });
  
     try {
-      const response = await fetch(`https://react-coffeshop.liara.run/users/${authContext.userInfos.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orders: updatedProducts })
+      const response = await apiRequests.patch(`/users/${authContext.userInfos.id}`, {
+        orders:updatedProducts
       });
   
-      if (!response.ok) {
+      if (!response.status>=200&&!response.status<300) {
         throw new Error(`Failed to update orders: ${response.status}`);
       }
   
-      const data = await response.json();
+      const data = await response.data;
       console.log("Orders updated successfully:", data);
       authContext.setUserInfos(prev => ({ ...prev, orders: data.orders }));
 

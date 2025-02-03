@@ -11,13 +11,14 @@ import AuthContext from '../../Context/AuthContext';
 import useFetch from '../../hooks/useFetch';
 import Comment from '../../Components/Comment/Comment';
 import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
+import apiRequests from '../../services/axios/Configs/configs';
 
 export default function MainProduct() {
   let authContext = useContext(AuthContext)
 
   let[count,setCount]=useState(1)
   let params = useParams()
-  let [mainData, setMainData] = useFetch("https://react-coffeshop.liara.run/products")
+  let [mainData, setMainData] = useFetch("/products")
   let[fetchComments,setFetchComments]=useState([])
   let[fetchLoading,setFetchLoading]=useState(true)
   let[likeCount,setLikeCount]=useState(null)
@@ -41,12 +42,12 @@ export default function MainProduct() {
 
   useEffect(()=>{
     setFetchLoading(true)
-    fetch(`https://react-coffeshop.liara.run/products/${params.ProductID}/`)
+    apiRequests.get(`/products/${params.ProductID}/`)
     .then(res=>{
-      if(!res.ok){
+      if(!res.status>=200&&!res.status<300){
         throw new Error('couldnt get data')
       }
-      return res.json()
+      return res.data
     }).then(data=>{
       console.log(data.comments);
       setFetchComments(data.comments||[])
@@ -126,16 +127,14 @@ export default function MainProduct() {
 
     const updatedComments = { comments: fetchComments };
   
-      fetch(`https://react-coffeshop.liara.run/products/${params.ProductID}/`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedComments),
+      apiRequests.patch(`/products/${params.ProductID}/`, {
+        updatedComments
       })
         .then((response) => {
-          if (!response.ok) {
+          if (!response.status>=200&&!response.status<300) {
             throw new Error("Failed to update the product.");
           }
-          return response.json();
+          return response.data;
         })
         .then((data) => {
           console.log("Product updated successfully:", data);

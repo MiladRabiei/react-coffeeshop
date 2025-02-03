@@ -6,6 +6,7 @@ import useForm from '../../hooks/useForm'
 import Button from '../../Components/form/Button'
 import useFetch from '../../hooks/useFetch'
 import AuthContext from '../../Context/AuthContext'
+import apiRequests from '../../services/axios/Configs/configs'
 export default function LoginAndRegister() {
 
   let navigate=useNavigate()
@@ -27,7 +28,7 @@ export default function LoginAndRegister() {
     number:{value:"",isValid:false},
     password:{value:"",isValid:false},
   },false)
-  let [mainData,setMainData]=useFetch("https://react-coffeshop.liara.run/users")
+  let [mainData,setMainData]=useFetch("/users")
 
 console.log(formRegisterState);
   let userLogin=event=>{
@@ -62,15 +63,11 @@ console.log(formRegisterState);
     return item.email!==newUserInfo.email
   })
   if(isNonExist){
-    fetch("https://react-coffeshop.liara.run/users",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(newUserInfo)
+    apiRequests.post("/users",{
+      newUserInfo
     })
     .then(res=>{
-      res.json()
+      res.data
     })
     .then(result=>{
       console.log(result);

@@ -5,6 +5,7 @@ import { Routes, Route, useRoutes, useLocation, HashRouter } from "react-router-
 import routes from './Routes'
 import AuthContext from './Context/AuthContext'
 import useFetch from './hooks/useFetch'
+import apiRequests from './services/axios/Configs/configs'
 
 export default function App() {
   let Router = useRoutes(routes)
@@ -21,7 +22,7 @@ export default function App() {
   let [nameCookie, setNameCookie] = useState("")
   let [shopBasket, setShopBasket] = useState([])
   let [isLoading, setIsLoading] = useState(true)
-  let [mainData, loading] = useFetch("https://react-coffeshop.liara.run/products")
+  let [mainData, loading] = useFetch("/products")
   let login = (userInfo) => {
     let now = new Date()
     now.setTime(now.getTime() + 2 * 24 * 60 * 60 * 1000)
@@ -39,12 +40,12 @@ export default function App() {
       let userInfo=JSON.parse(localStorage.getItem('userInfo'))||[]
       console.log(userInfo);
       try{
-        fetch(`https://react-coffeshop.liara.run/users/${userInfo?.id}`)
+        apiRequests.get(`/users/${userInfo.id}`)
         .then(res=>{
-          if(!res.ok){
+          if(!res.status>=200&&!res.status<300){
             console.log("failed to get datas");
           }
-          return res.json()
+          return res.data
         })
         .then(data=>{
           setUserInfos(data)

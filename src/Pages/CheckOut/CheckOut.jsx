@@ -4,6 +4,7 @@ import AuthContext from '../../Context/AuthContext'
 import Input from '../../Components/form/Input'
 import useForm from '../../hooks/useForm'
 import { emailValidator, maxValidator, minValidator, requiredValidator } from '../../validators/rules'
+import apiRequests from '../../services/axios/Configs/configs'
 
 export default function CheckOut() {
 
@@ -32,17 +33,15 @@ export default function CheckOut() {
       return item
     })
     try {
-      const response = await fetch(`https://react-coffeshop.liara.run/users/${authcontext.userInfos.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orders: orders })
+      const response = await apiRequests.patch(`/users/${authcontext.userInfos.id}`, {
+        orders:orders
       });
 
-      if (!response.ok) {
+      if (!response.status>=200&&!response.status<300) {
         throw new Error(`Failed to update orders: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data =await response.data
       console.log("Orders updated successfully:", data);
       authcontext.setUserInfos(data)
     } catch (error) {
@@ -63,17 +62,13 @@ export default function CheckOut() {
     let updatedInfos={...authcontext.userInfos,...newInfos}
     console.log(updatedInfos);
     try{
-      const response=await fetch(`https://react-coffeshop.liara.run/users/${authcontext.userInfos.id}`,{
-        method:"PATCH",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify(updatedInfos)
+      const response=await apiRequests.patch(`/users/${authcontext.userInfos.id}`,{
+        updatedInfos
       })
-      if(!response.ok){
+      if(!response.status>=200&&!response.status<300){
         throw new Error(`Failed to update user infos,${ response.status}`)
       }
-      const data=await response.json()
+      const data=await response.data
       console.log("userinfos updated successfully",data);
       authcontext.setUserInfos(data)
     }catch(err){
