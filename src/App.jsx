@@ -6,7 +6,6 @@ import routes from './Routes'
 import AuthContext from './Context/AuthContext'
 import useFetch from './hooks/useFetch'
 import apiRequests from './services/axios/Configs/configs'
-
 export default function App() {
   let Router = useRoutes(routes)
   let location = useLocation()
@@ -42,9 +41,6 @@ export default function App() {
       try{
         apiRequests.get(`/users/${userInfo.id}`)
         .then(res=>{
-          if(!res.status>=200&&!res.status<300){
-            console.log("failed to get datas");
-          }
           return res.data
         })
         .then(data=>{

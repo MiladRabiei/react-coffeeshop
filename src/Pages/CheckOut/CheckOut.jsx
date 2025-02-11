@@ -34,12 +34,8 @@ export default function CheckOut() {
     })
     try {
       const response = await apiRequests.patch(`/users/${authcontext.userInfos.id}`, {
-        orders:orders
+        orders
       });
-
-      if (!response.status>=200&&!response.status<300) {
-        throw new Error(`Failed to update orders: ${response.status}`);
-      }
 
       const data =await response.data
       console.log("Orders updated successfully:", data);
@@ -65,9 +61,7 @@ export default function CheckOut() {
       const response=await apiRequests.patch(`/users/${authcontext.userInfos.id}`,{
         updatedInfos
       })
-      if(!response.status>=200&&!response.status<300){
-        throw new Error(`Failed to update user infos,${ response.status}`)
-      }
+
       const data=await response.data
       console.log("userinfos updated successfully",data);
       authcontext.setUserInfos(data)

@@ -7,18 +7,19 @@ import Button from '../../Components/form/Button';
 import FilterSection from '../../Components/FilterSection/FilterSection';
 import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb';
 export default function Store() {
+  let [mainData,fetchLoading ] = useFetch("/products")
   const filterRef = useRef(null);
   const sectionToggleRef = useRef(null)
   const brandToggleRef = useRef(null)
   const coffeinToggleRef = useRef(null)
 
-  let [mainData,fetchLoading ] = useFetch("/products")
   let [displayProduct, setDisplayProducts] = useState([])
   let [displayFilteredProducts, setDisplayFilteredProducts] = useState([])
   let [loading, setLoading] = useState(false)
   let [counter, setCounter] = useState(1)
   let productPerLoad = 8
 console.log(fetchLoading);
+console.log(mainData);
   // load filtered products
   let[isChecked,setIsChecked]=useState(false)
   let[active,setActive]=useState(null)
@@ -46,7 +47,7 @@ console.log(fetchLoading);
     });
   };
   useEffect(() => {
-    const newFilteredProducts = mainData.filter((product) => {
+    const newFilteredProducts = mainData?.filter((product) => {
       const matchesCategory =
         filters.category.length === 0 || filters.category.includes(product.category);
       const matchesBrand =
@@ -57,7 +58,9 @@ console.log(fetchLoading);
         const matchesAvailability = !isChecked || product.count > 0;
       return matchesCategory && matchesBrand && matchesCaffeineLevel&&matchesAvailability;
     });
-    let sortedProducts=newFilteredProducts.length>0?[...newFilteredProducts]:[...mainData]
+
+
+      let sortedProducts=newFilteredProducts?.length>0?[...newFilteredProducts]:[...mainData]
     if(filters.sortBy==="محبوب ترین"){
       sortedProducts=sortedProducts.sort((a,b)=>b.reviews-a.reviews||a.id-b.id)
     }else if(filters.sortBy==="پرفروش ترین"){
@@ -66,9 +69,9 @@ console.log(fetchLoading);
       sortedProducts=sortedProducts.sort((a,b)=>a.price-b.price)
     }else if(filters.sortBy==="گران ترین"){
       sortedProducts=sortedProducts.sort((a,b)=>b.price-a.price)
-    }
+
     
-   setDisplayFilteredProducts(sortedProducts);
+   setDisplayFilteredProducts(sortedProducts);}
   }, [filters, mainData,isChecked]);
 
   let clearFilters = () => {
@@ -87,8 +90,10 @@ console.log(fetchLoading);
 
 // load products with more click
 useEffect(() => {
-  let firstProduct = [...mainData.slice(0, 8)]
+
+    let firstProduct = [...mainData.slice(0, 8)]
   setDisplayProducts([...firstProduct])
+
 }, [mainData])
 
 useEffect(() => {
@@ -150,6 +155,7 @@ useEffect(() => {
 let toggleFilterMenu = (elem) => {
   elem.classList.toggle("hidden")
 }
+
 return (
   <>
     <main>
@@ -332,7 +338,7 @@ return (
                     <Button
                       type={"submit"}
                       onClick={loadMoreComponent}
-                      className={`${displayProduct.length < mainData.length ? "flex-center" : "hidden"
+                      className={`${displayProduct?.length < mainData?.length ? "flex-center" : "hidden"
                         }  gap-x-1 my-4 text-orange-300 font-DanaMedium`}
                     >
                       مشاهده بیشتر ...

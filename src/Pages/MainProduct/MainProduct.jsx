@@ -44,9 +44,6 @@ export default function MainProduct() {
     setFetchLoading(true)
     apiRequests.get(`/products/${params.ProductID}/`)
     .then(res=>{
-      if(!res.status>=200&&!res.status<300){
-        throw new Error('couldnt get data')
-      }
       return res.data
     }).then(data=>{
       console.log(data.comments);
@@ -131,9 +128,7 @@ export default function MainProduct() {
         updatedComments
       })
         .then((response) => {
-          if (!response.status>=200&&!response.status<300) {
-            throw new Error("Failed to update the product.");
-          }
+
           return response.data;
         })
         .then((data) => {

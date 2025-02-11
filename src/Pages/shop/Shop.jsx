@@ -36,15 +36,11 @@ export default function Shop() {
         });
       }
     });
- 
+    let updatedOrders={orders:updatedProducts}
     try {
       const response = await apiRequests.patch(`/users/${authContext.userInfos.id}`, {
-        orders:updatedProducts
+        updatedOrders
       });
-  
-      if (!response.status>=200&&!response.status<300) {
-        throw new Error(`Failed to update orders: ${response.status}`);
-      }
   
       const data = await response.data;
       console.log("Orders updated successfully:", data);

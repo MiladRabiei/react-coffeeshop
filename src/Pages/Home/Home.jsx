@@ -19,7 +19,6 @@ export default function Home() {
   const prevButtonRef = useRef(null);
   const swiperRef = useRef(null);
   const persianDate = moment().locale("fa").format('jMMMM jD jYYYY');
-  console.log(persianDate);
   useEffect(() => {
     if (swiperRef.current) {
       const swiper = swiperRef.current.swiper;
@@ -45,8 +44,8 @@ export default function Home() {
 
   useEffect(() => {
     let productArray = []
-    randomNumbers.forEach(num => {
-      mainData.forEach((item, index) => {
+    randomNumbers?.forEach(num => {
+      mainData?.forEach((item, index) => {
         if (index === num) {
           productArray.push(item)
         }
