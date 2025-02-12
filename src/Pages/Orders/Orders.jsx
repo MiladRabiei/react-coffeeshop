@@ -17,7 +17,7 @@ export default function Orders() {
   console.log(authcontext.userInfos);
   return (
     <section className="orders">
-      <div className='container'>
+      
       {/* order info */}
       <div className="flex flex-col h-full flex-wrap  xl:flex-row xl:items-center gap-y-4 gap-x-4">
         <div className='flex flex-col w-full h-auto  md:max-h-[260px] gap-y-4 justify-start'>
@@ -195,7 +195,7 @@ export default function Orders() {
             </div>
           )}
       </div>
-    </div>
+    
     </section>
     
   )

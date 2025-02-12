@@ -1,17 +1,19 @@
 import React, { useContext } from 'react'
 import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb'
 import AuthContext from '../../Context/AuthContext'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import moment from 'jalali-moment'
 import apiRequests from '../../services/axios/Configs/configs'
 
 export default function Shop() {
   let authContext=useContext(AuthContext)
+  let navigate=useNavigate()
   let removeFromShopBox=(id)=>authContext.removefromshopbox(id)
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
   let emptyShopBox=()=>authContext.emptyshopbox()
   const jalaliTextDate = moment().locale("fa").format(" jYYYY/jM/jD");
+  
   const addOrderstoDB = async () => {
     let order = authContext.shopBasket.map(item => ({
       ...item,
@@ -23,29 +25,30 @@ export default function Shop() {
     let updatedProducts = [...authContext.userInfos.orders]; // Start with the existing orders array
     console.log(updatedProducts);
     order.forEach(product => {
-      const existsInOrders = updatedProducts.some(item => item.orderID === product.orderID);
+      const existsInOrders = updatedProducts.some(item => item.id === product.id&&item.status===product.status);
     
       if (!existsInOrders) {
         updatedProducts.push(product);
       } else {
         updatedProducts = updatedProducts.map(item => {
           if (item.orderID === product.orderID && item.status !== product.status) {
-            return item; 
+            return  item 
           }
           return item;
         });
       }
     });
-    let updatedOrders={orders:updatedProducts}
+    
     try {
       const response = await apiRequests.patch(`/users/${authContext.userInfos.id}`, {
-        updatedOrders
+        orders:updatedProducts
       });
   
       const data = await response.data;
       console.log("Orders updated successfully:", data);
       authContext.setUserInfos(prev => ({ ...prev, orders: data.orders }));
-
+      navigate('/checkout')
+      
     } catch (error) {
       console.error("Error updating orders:", error);
     }
@@ -173,9 +176,9 @@ export default function Shop() {
           </div>
         </div>
         {authContext.shopBasket.map(item=>(
-          <>
-          {item.off>0&&(
-        <div className='flex items-center justify-between gap-x-1 py-2 px-2 text-emerald-500 rounded-lg xl:px-3 text-sm xl:text-base'>
+          
+          item.off>0&&(
+        <div key={item.id} className='flex items-center justify-between gap-x-1 py-2 px-2 text-emerald-500 rounded-lg xl:px-3 text-sm xl:text-base'>
           <span> سود شما از خرید </span>
           <div className='flex items-center gap-x-1'>
               <span className=''>
@@ -188,8 +191,7 @@ export default function Shop() {
             <span>تومان</span>
           </div>
         </div>
-          )}
-          </>
+          )
         ))}
         
         <div className='flex items-center justify-between gap-x-1 py-2 px-2 bg-gray-100 dark:bg-zinc-800 dark:text-gray-400 rounded-lg xl:px-3 text-sm xl:text-base'>
@@ -239,7 +241,7 @@ export default function Shop() {
             {authContext.shopBasket.map(item=>(
             <>
             {item.off>0&&(
-            <div className='flex items-center justify-between gap-x-1 py-2 px-2 text-emerald-500 rounded-lg xl:px-3 text-sm xl:text-base'>
+            <div key={item.id} className='flex items-center justify-between gap-x-1 py-2 px-2 text-emerald-500 rounded-lg xl:px-3 text-sm xl:text-base'>
           <span> سود شما از خرید </span>
           <div className='flex items-center gap-x-1'>
               <span className=''>

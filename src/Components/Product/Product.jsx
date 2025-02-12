@@ -5,24 +5,39 @@ import AuthContext from '../../Context/AuthContext'
 export default function Product({id,name, off, src, count, price }) {
     let location = useLocation()
     let isStorePage = location.pathname === "/Store"
+    let isFavoritesPage=location.pathname ==="/userpanel/favourits"
     let authContext=useContext(AuthContext)
-
+    
     let addToShopBox=(id)=>{
         authContext.addtoshopbox(id)
     }
-
+    let addToFavorites=(id)=>{
+        authContext.addtofavorites(id)
+    }
+    let removeFromFavorites=(id)=>{
+        authContext.removefromfavorites(id)
+    }
     return (
         <>
 
-            <div className='group p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
-                <div className='relative mb-2 md:mb-5 '>
-                    <img src={import.meta.env.BASE_URL+src} className='group-hover:scale-105 duration-300 overflow-hidden rounded-lg  mx-auto md:w-auto' alt="" />
-                    {off ? (
-                        <>
-                            <span className='absolute top-1.5 right-1.5 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-2.5 md:px-3.5  rounded-full '>{off}%</span>
-                        </>
+        <div className='group p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
+            <div className='relative mb-2 md:mb-5 '>
+                <img src={import.meta.env.BASE_URL+src} className='group-hover:scale-105 duration-300 overflow-hidden rounded-lg  mx-auto md:w-auto' alt="" />
+                {off ? (
+                <>
+                <span className='absolute top-1.5 right-1.5 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-2.5 md:px-3.5  rounded-full '>{off}%</span>
+                </>
 
-                    ) : (null)}
+                ) : 
+                (null)
+                }
+                {isFavoritesPage&&(
+                <span onClick={()=>removeFromFavorites(id)} className='absolute top-1 left-1 block h-5 md:h-[30px] text-zinc-700 cursor-pointer   rounded-full '>
+                    <svg className='w-5 h-5 text-zinc-700'>
+                        <use href='#x-mark'></use>
+                    </svg>
+                </span>
+                )}
                 </div>
                 <Link to={`/Product-info/${id}`} className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
                     {name}
@@ -67,7 +82,7 @@ export default function Product({id,name, off, src, count, price }) {
                                             <use href='#shopping-cart'></use>
                                         </svg>
                                     </span>
-                                    <span className='block text-gray-400 hover:text-teal-600  dark:hover:text-emerald-500  transition-all rounded-full cursor-pointer'>
+                                    <span onClick={()=>addToFavorites(id)} className={`block  hover:text-teal-600  dark:hover:text-emerald-500  transition-all rounded-full cursor-pointer ${authContext.userInfos.favorites?.some(item=>item.id===id)?"fill-red-500 text-red-500":"fill-current text-gray-200 dark:text-gray-400"}`}>
                                         <svg className=' w-4 h-4 md:w-6 md:h-6 '>
                                             <use href='#heart'></use>
                                         </svg>
@@ -132,7 +147,7 @@ export default function Product({id,name, off, src, count, price }) {
                                         <use href='#shopping-cart'></use>
                                     </svg>
                                 </span>
-                                <span className='block text-gray-400 hover:text-teal-600  dark:hover:text-emerald-500  transition-all rounded-full cursor-pointer'>
+                                <span onClick={()=>addToFavorites(id)} className={`block  hover:text-teal-600  dark:hover:text-emerald-500  transition-all rounded-full cursor-pointer ${authContext.userInfos.favorites?.some(item=>item.id===id)?"fill-red-500 text-red-500":"fill-current text-gray-200 dark:text-gray-400"}`}>
                                     <svg className=' w-4 h-4 md:w-5 md:h-5 '>
                                         <use href='#heart'></use>
                                     </svg>
@@ -156,10 +171,10 @@ export default function Product({id,name, off, src, count, price }) {
                                 </svg>
                             </div>
                         </div>
-                    </>  
-                        )
+                        </>  
+                    )
                 }
-            </div>
+        </div>
         </>
 
 

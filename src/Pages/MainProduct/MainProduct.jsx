@@ -125,7 +125,7 @@ export default function MainProduct() {
     const updatedComments = { comments: fetchComments };
   
       apiRequests.patch(`/products/${params.ProductID}/`, {
-        updatedComments
+        ...updatedComments
       })
         .then((response) => {
 
@@ -139,6 +139,9 @@ export default function MainProduct() {
   
   }, [fetchComments]);
   
+  let addToFavorites=(id)=>{
+    authContext.addtofavorites(id)
+  }
   
 
 
@@ -165,7 +168,7 @@ export default function MainProduct() {
                   {/* right */}
                   <div className='flex  flex-col lg:w-96  gap-y-4'>
                   <div className='gap-x-3 '>
-                      <button className='border-2 border-gray-200 dark:border-white/20 rounded-full p-2'>
+                      <button onClick={(id)=>addToFavorites(id)} className={`border-2 border-gray-200 text-gray-200 dark:text-gray-400 dark:border-white/20 rounded-full p-2 ${authContext.userInfos.favorites?.some(item=>item.id===+params.ProductID)?"fill-red-500 text-red-500":"fill-current"}`}>
                         <svg className='w-5 h-5 '>
                           <use href='#heart'></use>
                         </svg>

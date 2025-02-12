@@ -7,7 +7,7 @@ import { emailValidator, maxValidator, minValidator, requiredValidator } from '.
 import apiRequests from '../../services/axios/Configs/configs'
 
 export default function CheckOut() {
-
+ 
   let[formCheckoutState,checkoutInputHandler]=useForm({
     username:{value:"",isValid:false},
     email:{value:"",isValid:false},
@@ -27,7 +27,7 @@ export default function CheckOut() {
 
   let cancelShopping = async (ID) => {
     let orders = authcontext.userInfos.orders.map(item => {
-      if (item.id === ID && !item.status !== "cancel") {
+      if (item.id === ID && item.status !== "cancel") {
         return { ...item, status: "cancel" }
       }
       return item
@@ -59,12 +59,12 @@ export default function CheckOut() {
     console.log(updatedInfos);
     try{
       const response=await apiRequests.patch(`/users/${authcontext.userInfos.id}`,{
-        updatedInfos
+        ...updatedInfos
       })
 
       const data=await response.data
       console.log("userinfos updated successfully",data);
-      authcontext.setUserInfos(data)
+      authcontext.setUserInfos(prevState=>({...prevState,...data}))
     }catch(err){
       console.log("error updating user infos",err);
     }

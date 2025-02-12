@@ -6,6 +6,7 @@ import routes from './Routes'
 import AuthContext from './Context/AuthContext'
 import useFetch from './hooks/useFetch'
 import apiRequests from './services/axios/Configs/configs'
+import { useMutation } from '@tanstack/react-query'
 export default function App() {
   let Router = useRoutes(routes)
   let location = useLocation()
@@ -103,6 +104,48 @@ export default function App() {
 
   }
 
+  let mutation=useMutation({
+    mutationFn:async(favorites)=>{
+      return apiRequests.patch(`/users/${userInfos.id}`,{
+        favorites
+      })
+    },
+    onSuccess:(res)=>{
+      console.log('favorits updated succesfully',res.status);
+      console.log(res.data);
+    },
+    onError:(err)=>{
+      console.log('an error happens for updating favorits',err);
+    }
+  })
+
+  let addtofavorites=(id)=>{
+    if(isLoggedIn){
+
+      let favoriteProduct=mainData.find(item=>item.id===id)
+      console.log(userInfos.favorites);
+      let isExistinFavorits=userInfos.favorites?.some(item=>item.id===id)
+      if(!isExistinFavorits){
+        let favorites=[...(userInfos?.favorites||[])]
+        favorites.push(favoriteProduct)
+        console.log(favorites);
+         mutation.mutate(favorites)
+         setUserInfos(prev=>({...prev,favorites}))
+      }
+    }
+  }
+  let removefromfavorites=(id)=>{
+    if(isLoggedIn){
+
+        let favorites=[...(userInfos?.favorites||[])]
+        favorites=favorites.filter(item=>item.id!==id)
+        console.log(favorites);
+         mutation.mutate(favorites)
+         setUserInfos(prev=>({...prev,favorites}))
+      }
+    
+  }
+
   let logout = () => {
     let now = new Date()
     now.setTime(now.getTime() - (2 * 24 * 60 * 60 * 1000))
@@ -147,6 +190,8 @@ export default function App() {
           login,
           logout,
           addtoshopbox,
+          addtofavorites,
+          removefromfavorites,
           removefromshopbox,
           emptyshopbox,
           increasecount,
@@ -286,7 +331,7 @@ export default function App() {
           <symbol id='arrow-right-start' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </symbol>
-          <symbol id='heart' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+          <symbol id='heart' xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
           </symbol>
           <symbol id='list-bullet' xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

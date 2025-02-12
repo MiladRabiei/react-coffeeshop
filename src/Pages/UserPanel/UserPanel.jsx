@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Navigate, NavLink, Outlet } from 'react-router-dom'
 import moment from "jalali-moment";
 import AuthContext from '../../Context/AuthContext';
 
@@ -19,11 +19,14 @@ export default function UserPanel() {
         overlayElem.current.classList.add("hidden")
     }
     const jalaliTextDate = moment().locale("fa").format(" jD jMMMM jYYYY");
-    
+    if(authcontext.isLoading){
+        return "loading..."
+    }
 
     return (
         <>
-            <section className='w-full h-full bg-[#f2f2f2] '>
+            {authcontext.isLoggedIn?(
+                <section className='w-full h-full bg-[#f2f2f2] '>
                 <div className='flex relative'>
                     {/* sidebar */}
                     <div ref={mobileMenuElem} className=' fixed w-64 lg:w-[300px] h-screen -right-64 text-white  lg:sticky top-0 z-[15] transition-all'>
@@ -50,7 +53,7 @@ export default function UserPanel() {
                                     سفارش ها
                                 </NavLink>
                                 
-                                <NavLink to={"favourits"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700"}>
+                                <NavLink to={"favourits"} className={link=>link.isActive?"bg-orange-400/30 fill-none":"bg-white text-zinc-700 fill-none"}>
                                     <svg className='w-7 h-7'>
                                         <use href='#heart'></use>
                                     </svg>
@@ -129,6 +132,9 @@ export default function UserPanel() {
                 </div>
                 <div ref={overlayElem} onClick={closeMobileMenu} className="overlay hidden fixed inset-0 bg-black/40 z-10"></div>
             </section>
+            ):(
+                <Navigate to={"/login"}/>
+            )}
         </>
     )
 }

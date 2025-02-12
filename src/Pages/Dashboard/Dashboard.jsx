@@ -196,7 +196,7 @@ export default function Dashboard() {
                   </div>
                 </td>
                 <td>{item.orderTime&&item.orderTime}</td>
-                <td>{item.price} تومان</td>
+                <td>{item.price.toLocaleString()} تومان</td>
                 {item.status==="cancel"?(
 
                   <td className='text-red-500'>لغو شده</td>
