@@ -52,7 +52,7 @@ export default function Adress() {
     <section className="address">
       
               <h2 className='mt-8 font-MorabbaMedium text-3xl'>اطلاعات</h2>
-              <div className='mt-4 mb-8 bg-white dark:bg-zinc-700 rounded-lg p-5 border border-gray-300 dark:border-white/10 '>
+              <div className='mt-4 mb-8 bg-white  rounded-lg p-5 border border-gray-300 '>
               {!authcontext.userInfos?.address?(
                 <div onClick={addData} className={`w-full h-full flex-col text-center items-center justify-center cursor-pointer ${showAddAddress?"flex":"hidden"}`}>
                   <h2 className='font-MorabbaMedium text-3xl'>اضافه کردن آدرس</h2>

@@ -52,7 +52,7 @@ export default function Orders() {
         </div>
         <div className='flex flex-col flex-1 h-auto md:max-h-[260px] gap-y-4 justify-start'>
           <p>جزییات سفارش ها :</p>
-          <div className="w-full grid h-auto  md:h-[150px] gap-x-2 gap-y-4 px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
+          <div className="w-full grid h-auto  md:h-[150px] gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
                child:flex child:items-center child:justify-between child:px-2 child:flex-1 child:gap-x-4 child:bg-white child:rounded-lg ">
             <div className=''>
               <span className='flex items-center w-30 min-h-[60px] gap-x-1'>
