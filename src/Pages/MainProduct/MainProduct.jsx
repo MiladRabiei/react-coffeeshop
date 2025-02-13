@@ -15,7 +15,7 @@ import apiRequests from '../../services/axios/Configs/configs';
 
 export default function MainProduct() {
   let authContext = useContext(AuthContext)
-
+  console.log(authContext.userInfos.favorites);
   let[count,setCount]=useState(1)
   let params = useParams()
   let [mainData, setMainData] = useFetch("/products")
@@ -168,7 +168,7 @@ export default function MainProduct() {
                   {/* right */}
                   <div className='flex  flex-col lg:w-96  gap-y-4'>
                   <div className='gap-x-3 '>
-                      <button onClick={(id)=>addToFavorites(id)} className={`border-2 border-gray-200 text-gray-200 dark:text-gray-400 dark:border-white/20 rounded-full p-2 ${authContext.userInfos.favorites?.some(item=>item.id===+params.ProductID)?"fill-red-500 text-red-500":"fill-current"}`}>
+                      <button onClick={()=>addToFavorites(+params.ProductID)} className={`border-2 border-gray-200   dark:border-white/20 rounded-full p-2 ${authContext.userInfos.favorites?.some(item=>item?.id===+params.ProductID)?"fill-red-500 text-red-500":"fill-current text-gray-200 dark:text-gray-400"}`}>
                         <svg className='w-5 h-5 '>
                           <use href='#heart'></use>
                         </svg>

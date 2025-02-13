@@ -124,7 +124,7 @@ export default function App() {
 
       let favoriteProduct=mainData.find(item=>item.id===id)
       console.log(userInfos.favorites);
-      let isExistinFavorits=userInfos.favorites?.some(item=>item.id===id)
+      let isExistinFavorits=userInfos.favorites?.some(item=>item?.id===id)
       if(!isExistinFavorits){
         let favorites=[...(userInfos?.favorites||[])]
         favorites.push(favoriteProduct)
@@ -138,7 +138,7 @@ export default function App() {
     if(isLoggedIn){
 
         let favorites=[...(userInfos?.favorites||[])]
-        favorites=favorites.filter(item=>item.id!==id)
+        favorites=favorites.filter(item=>item?.id!==id)
         console.log(favorites);
          mutation.mutate(favorites)
          setUserInfos(prev=>({...prev,favorites}))

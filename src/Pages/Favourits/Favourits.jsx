@@ -12,13 +12,13 @@ export default function Favourits() {
             <div className='mt-4  grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3.5 md:gap-5  p-5'>
               {authcontext.userInfos.favorites.map(item=>(
                 <Product
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                off={item.off}
-                src={item.src}
-                count={item.count}
-                price={item.price}
+                key={item?.id}
+                id={item?.id}
+                name={item?.name}
+                off={item?.off}
+                src={item?.src}
+                count={item?.count}
+                price={item?.price}
               />
               ))}
             </div>
