@@ -10,7 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 export default function App() {
   let Router = useRoutes(routes)
   let location = useLocation()
-  const isCmsPage = location.pathname.toLowerCase() === "/cms";
+  const isCmsPage = location.pathname.toLowerCase() === "/cms" || location.pathname.toLowerCase().includes("/cms/");
   const is403Page = location.pathname.toLowerCase() === "/forbidden";
   const isUserPanel = location.pathname.toLowerCase() === "/userpanel" || location.pathname.toLowerCase().includes("/userpanel/")
 
@@ -35,26 +35,26 @@ export default function App() {
     localStorage.setItem('userInfo', JSON.stringify(userInfo))
     setUserInfos(userInfo)
   }
-  useEffect(()=>{
-    if(isLoggedIn){
-      let userInfo=JSON.parse(localStorage.getItem('userInfo'))||[]
+  useEffect(() => {
+    if (isLoggedIn) {
+      let userInfo = JSON.parse(localStorage.getItem('userInfo')) || []
       console.log(userInfo);
-      try{
+      try {
         apiRequests.get(`/users/${userInfo.id}`)
-        .then(res=>{
-          return res.data
-        })
-        .then(data=>{
-          setUserInfos(data)
-          localStorage.setItem('userInfo',JSON.stringify(data))
-        })
+          .then(res => {
+            return res.data
+          })
+          .then(data => {
+            setUserInfos(data)
+            localStorage.setItem('userInfo', JSON.stringify(data))
+          })
 
       }
-      catch(err){
+      catch (err) {
         console.log(err);
       }
     }
-  },[isLoggedIn])
+  }, [isLoggedIn])
 
   useEffect(() => {
     let cookie = document.cookie
@@ -104,46 +104,46 @@ export default function App() {
 
   }
 
-  let mutation=useMutation({
-    mutationFn:async(favorites)=>{
-      return apiRequests.patch(`/users/${userInfos.id}`,{
+  let mutation = useMutation({
+    mutationFn: async (favorites) => {
+      return apiRequests.patch(`/users/${userInfos.id}`, {
         favorites
       })
     },
-    onSuccess:(res)=>{
-      console.log('favorits updated succesfully',res.status);
+    onSuccess: (res) => {
+      console.log('favorits updated succesfully', res.status);
       console.log(res.data);
     },
-    onError:(err)=>{
-      console.log('an error happens for updating favorits',err);
+    onError: (err) => {
+      console.log('an error happens for updating favorits', err);
     }
   })
 
-  let addtofavorites=(id)=>{
-    if(isLoggedIn){
+  let addtofavorites = (id) => {
+    if (isLoggedIn) {
 
-      let favoriteProduct=mainData.find(item=>item.id===id)
+      let favoriteProduct = mainData.find(item => item.id === id)
       console.log(userInfos.favorites);
-      let isExistinFavorits=userInfos.favorites?.some(item=>item?.id===id)
-      if(!isExistinFavorits){
-        let favorites=[...(userInfos?.favorites||[])]
+      let isExistinFavorits = userInfos.favorites?.some(item => item?.id === id)
+      if (!isExistinFavorits) {
+        let favorites = [...(userInfos?.favorites || [])]
         favorites.push(favoriteProduct)
         console.log(favorites);
-         mutation.mutate(favorites)
-         setUserInfos(prev=>({...prev,favorites}))
+        mutation.mutate(favorites)
+        setUserInfos(prev => ({ ...prev, favorites }))
       }
     }
   }
-  let removefromfavorites=(id)=>{
-    if(isLoggedIn){
+  let removefromfavorites = (id) => {
+    if (isLoggedIn) {
 
-        let favorites=[...(userInfos?.favorites||[])]
-        favorites=favorites.filter(item=>item?.id!==id)
-        console.log(favorites);
-         mutation.mutate(favorites)
-         setUserInfos(prev=>({...prev,favorites}))
-      }
-    
+      let favorites = [...(userInfos?.favorites || [])]
+      favorites = favorites.filter(item => item?.id !== id)
+      console.log(favorites);
+      mutation.mutate(favorites)
+      setUserInfos(prev => ({ ...prev, favorites }))
+    }
+
   }
 
   let logout = () => {
@@ -331,7 +331,7 @@ export default function App() {
           <symbol id='arrow-right-start' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </symbol>
-          <symbol id='heart' xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+          <symbol id='heart' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
           </symbol>
           <symbol id='list-bullet' xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -398,6 +398,15 @@ export default function App() {
           </symbol>
           <symbol id='clock' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </symbol>
+          <symbol id='users' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+          </symbol>
+          <symbol id='documents' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+          </symbol>
+          <symbol id='discount' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </symbol>
 
 

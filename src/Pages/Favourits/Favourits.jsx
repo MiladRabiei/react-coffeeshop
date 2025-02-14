@@ -9,7 +9,7 @@ export default function Favourits() {
       
         <div className={`w-full ${!authcontext.userInfos.favorites?.length>0&&"bg-white shadow-noraml rounded-lg"}`}>
           {authcontext.userInfos.favorites?.length>0?(
-            <div className='mt-4  grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3.5 md:gap-5  p-5'>
+            <div className='mt-4  grid xs:grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3.5 md:gap-5  p-5'>
               {authcontext.userInfos.favorites.map(item=>(
                 <Product
                 key={item?.id}

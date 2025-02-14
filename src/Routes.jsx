@@ -33,7 +33,10 @@ let routes = [
     { path: "/login", element: <LoginAndRegister /> },
     { path: "/register", element: <LoginAndRegister /> },
     {path:"/cms/*",element:<PrivateRoute/>, children:[
-        {path:"",element:<Cms/>},
+        {path:"",element:<Cms/>,children:[
+        
+        ]},
+        
     ]},
     {path:"/userpanel/",element:<UserPanel/>,children:[
         {path:"dashboard",element:<Dashboard/>},
