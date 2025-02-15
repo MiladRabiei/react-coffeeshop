@@ -26,7 +26,7 @@ export default function Cms() {
     return (
         <>
             {authcontext.isLoggedIn?(
-                <section className='w-full  h-screen bg-[#f2f2f2] '>
+            <section className='w-full  h-full bg-[#f2f2f2] '>
                 <div className='flex relative'>
                     {/* sidebar */}
                     <div ref={mobileMenuElem} className=' fixed w-64 lg:w-[300px] h-screen -right-64 text-white  lg:sticky top-0 z-[15] transition-all'>

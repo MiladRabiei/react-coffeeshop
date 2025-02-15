@@ -14,6 +14,14 @@ export default function CmsProduct() {
   let [countState,setCountState]=useState()
   let [discountState,setDiscountState]=useState(0)
   let [srcState,setSrcState]=useState()
+  let [editNameState,setEditNameState]=useState()
+  let [editBrandState,setEditBrandState]=useState()
+  let [editCaffeineState,setEditCaffeineState]=useState()
+  let [editCountState,setEditCountState]=useState()
+  let [editPriceState,setEditPriceState]=useState()
+  let [editOffState,setEditOffState]=useState()
+  let [editSrcState,setEditSrcState]=useState()
+  let [editCategoryState,setEditCategoryState]=useState()
   let editOverlay=useRef()
   let overlayContent=useRef()
   let newProduct={
@@ -32,7 +40,7 @@ export default function CmsProduct() {
     ordercount:0,
     comments:[]
   }
-  let mutation=useMutation({
+  let postMutation=useMutation({
     mutationFn:async(newProduct)=>{
       return apiRequests.post("/products",{
         ...newProduct
@@ -45,11 +53,32 @@ export default function CmsProduct() {
       console.log("an error occured when adding new product",err);
     }
   })
+  let patchMutation=useMutation({
+    mutationFn:async(newProduct,id)=>{
+      return apiRequests.patch(`/products/${id}`,{
+        ...newProduct
+      })
+    },
+    onSuccess:(res)=>{
+      console.log("successfully edited product infos",res);
+    },
+    onError:(err)=>{
+      console.log("an error occured when editing product infos",err);
+    }
+  })
   let editProduct=(id)=>{
     let mainProduct=mainData.find(item=>item.id===id)
     console.log(mainProduct);
-    let {brand,caffeineLevel,count,price,off,src}=mainProduct
+    let {name,brand,category,caffeineLevel,count,price,off,src}=mainProduct
     console.log(price);
+    setEditNameState(name)
+    setEditBrandState(brand)
+    setEditCategoryState(category)
+    setEditCaffeineState(caffeineLevel)
+    setEditCountState(count)
+    setEditPriceState(price)
+    setEditOffState(off)
+    setEditSrcState(src)
     editOverlay.current.classList.remove("hidden")
     editOverlay.current.classList.add("flex-center")
   }
@@ -86,7 +115,7 @@ export default function CmsProduct() {
           <option value="">...</option>
             <option value="کم">کم</option>
             <option value="متوسط">متوسط</option>
-            <option value="زیاد">زیاد</option>
+            <option value="بالا">بالا</option>
           </select>
         </div>
         <div className=' rounded-lg overflow-hidden'>
@@ -141,23 +170,38 @@ export default function CmsProduct() {
       <div ref={editOverlay} onClick={(event)=>closeEditOverlay(event)} className=" overlay hidden  fixed inset-0 bg-black/40 z-[15]">
       <div ref={overlayContent} className="bg-white w-[350px] p-5 flex flex-col gap-y-2">
         <h2 className='font-MorabbaMedium text-2xl text-center'>اطلاعات جدید را وارد نمایید</h2>
-        <div className='rounded-lg overflow-hidden'>
-          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700' type="text" placeholder='اسم محصول' />
+        <div className='rounded-lg overflow-hidden '>
+          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editNameState} onChange={(event)=>setEditNameState(event.target.value)} type="text" placeholder='اسم محصول' />
         </div>
         <div className='rounded-lg overflow-hidden'>
-          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700' type="text" placeholder='برند محصول' />
+          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editBrandState} onChange={(event)=>setEditBrandState(event.target.value)} type="text" placeholder='برند محصول' />
+        </div>
+        <div className=' rounded-lg overflow-hidden'>
+          <select  onChange={(event)=>setEditCategoryState(event.target.value)} value={editCategoryState} className='bg-gray-100 h-10 w-full px-2 outline-none' name="دسته بندی" id="">
+            <option value="دانه قهوه">دانه قهوه</option>
+            <option value="کپسول قهوه">کپسول قهوه</option>
+            <option value="قهوه ساز">قهوه ساز</option>
+          </select>
+        </div>
+        <div className=' rounded-lg overflow-hidden'>
+          <select  disabled={editCategoryState==="قهوه ساز"} value={editCategoryState==="قهوه ساز"?"":editCaffeineState} onChange={(event)=>setEditCaffeineState(event.target.value)} className='bg-gray-100 h-10 w-full px-2 outline-none' name="" id="">
+          <option value="">...</option>
+            <option value="کم">کم</option>
+            <option value="متوسط">متوسط</option>
+            <option value="بالا">بالا</option>
+          </select>
         </div>
         <div className='rounded-lg overflow-hidden'>
-          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700' type="number" placeholder='قیمت محصول' />
+          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editPriceState} onChange={(event)=>setEditPriceState(event.target.value)} type="number" placeholder='قیمت محصول' />
         </div>
         <div className='rounded-lg overflow-hidden'>
-          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700' type="number" placeholder='تعداد محصول' />
+          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editCountState} onChange={(event)=>setEditCountState(event.target.value)} type="number" placeholder='تعداد محصول' />
         </div>
         <div className='rounded-lg overflow-hidden'>
-          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700' type="number" placeholder='تخفیف محصول' />
+          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editOffState} onChange={(event)=>setEditOffState(event.target.value)} type="number" placeholder='تخفیف محصول' />
         </div>
         <div className='rounded-lg overflow-hidden'>
-          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700' type="text" placeholder='آدرس عکس محصول' />
+          <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editSrcState} onChange={(event)=>setEditSrcState(event.target.value)} type="text" placeholder='آدرس عکس محصول' />
         </div>
         <div className='w-full'>
           <button className="w-full text-white bg-orange-300 rounded-lg h-10">
