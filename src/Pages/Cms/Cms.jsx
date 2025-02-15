@@ -39,7 +39,7 @@ export default function Cms() {
                             <ul className='flex font-Dana flex-col mt-8 gap-y-2 child:px-3 child:py-3 child:flex child:items-center
                             child:text-normal child:gap-x-2  child:rounded-2xl'>
                                 
-                                <NavLink to={"dashboard"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700"}>
+                                <NavLink to={"products"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700"}>
                                     <svg className='w-7 h-7'>
                                         <use href='#shopping-cart'></use>
                                     </svg>
@@ -53,21 +53,21 @@ export default function Cms() {
                                     سفارش ها
                                 </NavLink>
                                 
-                                <NavLink to={"favourits"} className={link=>link.isActive?"bg-orange-400/30 fill-none":"bg-white text-zinc-700 fill-none"}>
+                                <NavLink to={"users"} className={link=>link.isActive?"bg-orange-400/30 fill-none":"bg-white text-zinc-700 fill-none"}>
                                     <svg className='w-7 h-7'>
                                         <use href='#users'></use>
                                     </svg>
                                      کاربران 
                                 </NavLink>
                                 
-                                <NavLink to={"adress"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700 first:text-orange-500"}>
+                                <NavLink to={"discounts"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700 first:text-orange-500"}>
                                     <svg className='w-7 h-7'>
                                         <use href='#discount'></use>
                                     </svg>
                                     تخفیف ها
                                 </NavLink>
                                 
-                                <NavLink to={"settings"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700 first:text-orange-500"}>
+                                <NavLink to={"documents"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700 first:text-orange-500"}>
                                     <svg className='w-7 h-7'>
                                         <use href='#documents'></use>
                                     </svg>
@@ -130,7 +130,7 @@ export default function Cms() {
                         <div><Outlet/></div>
                     </div>
                 </div>
-                <div ref={overlayElem} onClick={closeMobileMenu} className="overlay hidden fixed inset-0 bg-black/40 z-10"></div>
+                <div ref={overlayElem} onClick={closeMobileMenu} className="overlay hidden fixed inset-0 bg-black/40 z-10 "></div>
             </section>
             ):(
                 <Navigate to={"/login"}/>

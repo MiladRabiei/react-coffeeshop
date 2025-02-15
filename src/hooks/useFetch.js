@@ -21,7 +21,7 @@ export default function useFetch(url) {
     }
     })
     
-    console.log(isFetched);
+    console.log(isLoading);
 
       return [data??[],isLoading]
 }

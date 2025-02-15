@@ -64,7 +64,7 @@ console.log(formRegisterState);
   })
   if(isNonExist){
     apiRequests.post("/users",{
-      newUserInfo
+      ...newUserInfo
     })
     .then(res=>{
       res.data

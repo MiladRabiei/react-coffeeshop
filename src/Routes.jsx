@@ -20,6 +20,12 @@ import Adress from "./Pages/Adress/Adress"
 import Settings from "./Pages/Settings/Settings"
 import Comments from "./Pages/Comments/Comments"
 import CheckOut from "./Pages/CheckOut/CheckOut"
+import CmsComments from "./Pages/CmsComments/CmsComments"
+import CmsProduct from "./Pages/cmsProduct/CmsProduct"
+import CmsOrders from "./Pages/CmsOrders/CmsOrders"
+import CmsUsers from "./Pages/CmsUsers/CmsUsers"
+import CmsDiscounts from "./Pages/CmsDiscounts/CmsDiscounts"
+import CmsDocuments from "./Pages/CmsDocuments/CmsDocuments"
 let routes = [
     { path: "/", element: <Navigate to="/home" replace /> },
     { path: "/home", element: <Home /> },
@@ -34,9 +40,13 @@ let routes = [
     { path: "/register", element: <LoginAndRegister /> },
     {path:"/cms/*",element:<PrivateRoute/>, children:[
         {path:"",element:<Cms/>,children:[
-        
+            {path:"products",element:<CmsProduct/>},
+            {path:"orders",element:<CmsOrders/>},
+            {path:"users",element:<CmsUsers/>},
+            {path:"discounts",element:<CmsDiscounts/>},
+            {path:"documents",element:<CmsDocuments/>},
+            {path:"comments",element:<CmsComments/>},
         ]},
-        
     ]},
     {path:"/userpanel/",element:<UserPanel/>,children:[
         {path:"dashboard",element:<Dashboard/>},

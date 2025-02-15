@@ -7,7 +7,7 @@ import Button from '../../Components/form/Button';
 import FilterSection from '../../Components/FilterSection/FilterSection';
 import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb';
 export default function Store() {
-  let [mainData,fetchLoading ] = useFetch("/products")
+  let [mainData,isLoading ] = useFetch("/products")
   const filterRef = useRef(null);
   const sectionToggleRef = useRef(null)
   const brandToggleRef = useRef(null)
@@ -18,8 +18,7 @@ export default function Store() {
   let [loading, setLoading] = useState(false)
   let [counter, setCounter] = useState(1)
   let productPerLoad = 8
-console.log(fetchLoading);
-console.log(mainData);
+console.log(isLoading);
   // load filtered products
   let[isChecked,setIsChecked]=useState(false)
   let[active,setActive]=useState(null)
@@ -47,31 +46,34 @@ console.log(mainData);
     });
   };
   useEffect(() => {
-    const newFilteredProducts = mainData?.filter((product) => {
-      const matchesCategory =
-        filters.category.length === 0 || filters.category.includes(product.category);
-      const matchesBrand =
-        filters.brand.length === 0 || filters.brand.includes(product.brand);
-      const matchesCaffeineLevel =
-        filters.caffeineLevel.length === 0 ||
-        filters.caffeineLevel.includes(product.caffeineLevel);
-        const matchesAvailability = !isChecked || product.count > 0;
-      return matchesCategory && matchesBrand && matchesCaffeineLevel&&matchesAvailability;
-    });
-
-
-      let sortedProducts=newFilteredProducts?.length>0?[...newFilteredProducts]:[...mainData]
-    if(filters.sortBy==="محبوب ترین"){
-      sortedProducts=sortedProducts.sort((a,b)=>b.reviews-a.reviews||a.id-b.id)
-    }else if(filters.sortBy==="پرفروش ترین"){
-      sortedProducts=sortedProducts.sort((a,b)=>b.sales-a.sales)
-    }else if(filters.sortBy==="ارزان ترین"){
-      sortedProducts=sortedProducts.sort((a,b)=>a.price-b.price)
-    }else if(filters.sortBy==="گران ترین"){
-      sortedProducts=sortedProducts.sort((a,b)=>b.price-a.price)
-
     
-   setDisplayFilteredProducts(sortedProducts);}
+      const newFilteredProducts = mainData?.filter((product) => {
+        const matchesCategory =
+          filters.category.length === 0 || filters.category.includes(product.category);
+        const matchesBrand =
+          filters.brand.length === 0 || filters.brand.includes(product.brand);
+        const matchesCaffeineLevel =
+          filters.caffeineLevel.length === 0 ||
+          filters.caffeineLevel.includes(product.caffeineLevel);
+          const matchesAvailability = !isChecked || product.count > 0;
+        return matchesCategory && matchesBrand && matchesCaffeineLevel&&matchesAvailability;
+      });
+  
+  
+        let sortedProducts=newFilteredProducts?.length>0?[...newFilteredProducts]:[...mainData]
+      if(filters.sortBy==="محبوب ترین"){
+        sortedProducts=sortedProducts.sort((a,b)=>b.reviews-a.reviews||a.id-b.id)
+      }else if(filters.sortBy==="پرفروش ترین"){
+        sortedProducts=sortedProducts.sort((a,b)=>b.sales-a.sales)
+      }else if(filters.sortBy==="ارزان ترین"){
+        sortedProducts=sortedProducts.sort((a,b)=>a.price-b.price)
+      }else if(filters.sortBy==="گران ترین"){
+        sortedProducts=sortedProducts.sort((a,b)=>b.price-a.price)
+      }
+  
+      
+     setDisplayFilteredProducts(sortedProducts);
+      
   }, [filters, mainData,isChecked]);
 
   let clearFilters = () => {
@@ -156,6 +158,10 @@ let toggleFilterMenu = (elem) => {
   elem.classList.toggle("hidden")
 }
 
+if(isLoading){
+  return <p>...loading</p>
+}
+console.log(displayFilteredProducts);
 return (
   <>
     <main>
@@ -294,7 +300,7 @@ return (
                   
                 </div>
               </div>
-              {fetchLoading?(
+              {isLoading?(
                 <div className="flex-center mt-20">
                   <CircleSpinner/>
                 </div>
