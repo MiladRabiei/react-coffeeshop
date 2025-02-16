@@ -130,7 +130,7 @@ export default function Header() {
 
                     {authContext.userInfos&&authContext.userInfos.role === "admin"&&(
                         <li>
-                            <NavLink to="Cms" className={link => link.isActive ? "lgactive" : ""}>
+                            <NavLink to="Cms/products" className={link => link.isActive ? "lgactive" : ""}>
                                 پنل مدیریت
                             </NavLink>
                         </li>
