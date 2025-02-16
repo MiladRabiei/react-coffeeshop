@@ -25,7 +25,7 @@ export default function Product({id,name, off, src, count, price }) {
                 <img src={import.meta.env.BASE_URL+src} className='group-hover:scale-105 duration-300 overflow-hidden rounded-lg  mx-auto md:w-auto' alt="" />
                 {off ? (
                 <>
-                <span className='absolute top-1.5 right-1.5 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-2.5 md:px-3.5  rounded-full '>{off}%</span>
+                <span className='absolute top-1.5 right-0 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-1.5 md:px-2.5  rounded-full '>{off}%</span>
                 </>
 
                 ) : 

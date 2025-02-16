@@ -2,10 +2,9 @@ import React, { useRef, useState } from 'react'
 import useFetch from '../../hooks/useFetch'
 import { useMutation } from '@tanstack/react-query';
 import apiRequests from '../../services/axios/Configs/configs';
-
+import Swal from 'sweetalert2';
 export default function CmsProduct() {
-  let [mainData,isLoading]=useFetch("/products")
-  console.log(mainData);
+  let [mainData,isLoading,refetch]=useFetch("/products")
   let [nameState,setNameState]=useState("")
   let [brandState,setBrandState]=useState("")
   let [priceState,setPriceState]=useState()
@@ -22,17 +21,19 @@ export default function CmsProduct() {
   let [editOffState,setEditOffState]=useState()
   let [editSrcState,setEditSrcState]=useState()
   let [editCategoryState,setEditCategoryState]=useState()
+  let [itemId,setItemId]=useState()
   let editOverlay=useRef()
   let overlayContent=useRef()
+  // add new produc section
   let newProduct={
     id:mainData.length+1,
-    name:nameState,
-    brand:brandState,
-    price:priceState,
+    name:nameState.trim(),
+    brand:brandState.trim(),
+    price:+priceState,
     category:categoryState,
     caffeineLevel:caffeineState,
-    count:countState,
-    off:discountState,
+    count:+countState,
+    off:+discountState,
     src:srcState,
     sales:0,
     popularity:0,
@@ -48,22 +49,79 @@ export default function CmsProduct() {
     },
     onSuccess:(res)=>{
       console.log("successfully added new product",res);
+      Swal.fire({
+        title: "محصول شما با موفقیت اضافه شد",
+        icon: "success",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
+      refetch()
     },
     onError:(err)=>{
       console.log("an error occured when adding new product",err);
+      Swal.fire({
+        title: "مشکلی وجود دارد!",
+        icon: "error",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
     }
   })
+  let addNewProduct=(event)=>{
+    event.preventDefault()
+    if(newProduct.name&&newProduct.brand&&newProduct.price&&newProduct.category&&newProduct.count&&newProduct.off!=="undefined"&&newProduct.src){
+      postMutation.mutate(newProduct)
+      setNameState("")
+      setBrandState("")
+      setPriceState("")
+      setCategoryState("دانه قهوه")
+      setCaffeineState("")
+      setCountState("")
+      setDiscountState(0)
+      setSrcState("")
+    }
+  }
+  // edit product section
   let patchMutation=useMutation({
-    mutationFn:async(newProduct,id)=>{
-      return apiRequests.patch(`/products/${id}`,{
-        ...newProduct
+    mutationFn:async({newData,itemId})=>{
+      return apiRequests.patch(`/products/${itemId}`,{
+        ...newData
       })
     },
     onSuccess:(res)=>{
-      console.log("successfully edited product infos",res);
+      console.log("successfully edited product infos",res.data);
+      Swal.fire({
+        title: "محصول شما با موفقیت آپدیت شد",
+        icon: "success",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
+      refetch()
     },
     onError:(err)=>{
       console.log("an error occured when editing product infos",err);
+      Swal.fire({
+        title: "مشکلی وجود دارد!",
+        icon: "error",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
     }
   })
   let editProduct=(id)=>{
@@ -79,14 +137,84 @@ export default function CmsProduct() {
     setEditPriceState(price)
     setEditOffState(off)
     setEditSrcState(src)
+    setItemId(id)
     editOverlay.current.classList.remove("hidden")
     editOverlay.current.classList.add("flex-center")
+  }
+  let editedData=()=>{
+    let newData={
+      name:editNameState,
+      brand:editBrandState,
+      category:editCategoryState,
+      caffeineLevel:editCaffeineState,
+      count:+editCountState,
+      price:+editPriceState,
+      off:+editOffState,
+      src:editSrcState
+    }
+    patchMutation.mutate({newData,itemId})
+    editOverlay.current.classList.add("hidden")
+    editOverlay.current.classList.remove("flex-center")
   }
   let closeEditOverlay=(event)=>{
     if(!overlayContent.current.contains(event.target)){
       editOverlay.current.classList.add("hidden")
     editOverlay.current.classList.remove("flex-center")
     }
+  }
+  // delete product section
+  let deleteMutation=useMutation({
+    mutationFn:async(id)=>{
+       return apiRequests.delete(`/products/${id}`)
+    },
+    onSuccess:(res)=>{
+      console.log("successfully deleted product",res.data);
+      Swal.fire({
+        title: "محصول شما با موفقیت حذف شد",
+        icon: "success",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
+      refetch()
+    },
+    onError:(err)=>{
+      console.log("an error occured when deleting product",err);
+      Swal.fire({
+        title: "مشکلی وجود دارد!",
+        icon: "error",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
+    }
+  })
+  let deleteProduct=(id)=>{
+    
+    Swal.fire({
+      title: "آیا از حذف این محصول اطمینان دارید؟",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "بله",
+      cancelButtonText:"لغو",
+      customClass:{
+        title:"text-xl",
+        icon:"text-sm",
+        confirmButton:"bg-orange-300"
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteMutation.mutate(id)
+      }
+    });
+    
   }
   return (
     <section className="products mt-8">
@@ -95,13 +223,13 @@ export default function CmsProduct() {
         <form action="">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
         <div className=' rounded-lg overflow-hidden'>
-          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={nameState} onChange={(event)=>setNameState(event.target.value)} type="text" placeholder='اسم محصول'/>
+          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={nameState} onChange={(event)=>setNameState(event.target.value)} type="text" placeholder='اسم محصول' required/>
         </div>
         <div className=' rounded-lg overflow-hidden'>
-          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={brandState} onChange={(event)=>{setBrandState(event.target.value)}} type="text" placeholder='برند محصول'/>
+          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={brandState} onChange={(event)=>{setBrandState(event.target.value)}} type="text" placeholder='برند محصول' required/>
         </div>
         <div className=' rounded-lg overflow-hidden'>
-          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={priceState} onChange={(event)=>{setPriceState(event.target.value)}} type="number" placeholder='قیمت محصول'/>
+          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={priceState} onChange={(event)=>{setPriceState(event.target.value)}} type="number" placeholder='قیمت محصول' required/>
         </div>
         <div className=' rounded-lg overflow-hidden'>
           <select  onChange={(event)=>setCategoryState(event.target.value)} value={categoryState} className='bg-gray-100 h-10 w-full px-2 outline-none' name="دسته بندی" id="">
@@ -119,29 +247,31 @@ export default function CmsProduct() {
           </select>
         </div>
         <div className=' rounded-lg overflow-hidden'>
-          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={countState} onChange={(event)=>{setCountState(event.target.value)}} type="number" placeholder='تعداد محصول'/>
+          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={countState} onChange={(event)=>{setCountState(event.target.value)}} type="number" placeholder='تعداد محصول' required/>
         </div>
         <div className=' rounded-lg overflow-hidden'>
-          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' type="number" value={discountState} onChange={(event)=>setDiscountState(event.target.value)} placeholder='تخفیف محصول'/>
+          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' type="number" value={discountState} onChange={(event)=>setDiscountState(event.target.value)} placeholder='تخفیف محصول' required/>
         </div>
         <div className=' rounded-lg overflow-hidden'>
-          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={srcState} onChange={(event)=>{setSrcState(event.target.value)}} type="text" placeholder='آدرس عکس محصول'/>
+          <input className='block w-full bg-gray-100 text-zinc-700 h-10 outline-none px-2' value={srcState} onChange={(event)=>{setSrcState(event.target.value)}} type="text" placeholder='آدرس عکس محصول' required/>
         </div>
         </div>
         <div className='flex justify-end mt-4'>
-        <button className='w-30 rounded-lg bg-orange-300 text-white p-2'>ثبت محصول</button>
+        <button onClick={(event)=>addNewProduct(event)} className='w-30 rounded-lg bg-orange-300 text-white p-2'>ثبت محصول</button>
         </div>
         </form>
       </div>
 
       <div className="rounded-lg bg-white p-5 border border-gray-300">
       <table className='w-full'>
-        <thead className='bg-orange-300 w-full text-white p-2 h-10 flex items-center child:justify-center child:flex child:flex-1'>
+        <thead >
+          <tr className='bg-orange-300 w-full text-white p-2 h-10 flex items-center child:justify-center child:flex child:flex-1'>
           <th>عکس</th>
           <th>اسم</th>
           <th>قیمت</th>
           <th>موجودی</th>
           <th>عملیات</th>
+          </tr>
         </thead>
         <tbody className='w-full '>
           {mainData?.map(item=>(
@@ -158,7 +288,7 @@ export default function CmsProduct() {
             <td>{item.count}</td>
             <td className='flex-col xs:flex-row gap-x-3 gap-y-1'>
               <button onClick={()=>editProduct(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>ویرایش </button>
-              <button className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>حذف</button>
+              <button onClick={()=>deleteProduct(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>حذف</button>
             </td>
           </tr>
           ))}
@@ -204,7 +334,7 @@ export default function CmsProduct() {
           <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editSrcState} onChange={(event)=>setEditSrcState(event.target.value)} type="text" placeholder='آدرس عکس محصول' />
         </div>
         <div className='w-full'>
-          <button className="w-full text-white bg-orange-300 rounded-lg h-10">
+          <button onClick={editedData} className="w-full text-white bg-orange-300 rounded-lg h-10">
             ثبت اطلاعات
           </button>
         </div>

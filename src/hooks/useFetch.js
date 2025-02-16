@@ -5,7 +5,7 @@ import CircleSpinner from '../Components/CircleSpinner/CircleSpinner'
 
 export default function useFetch(url) {
     let queryClient=useQueryClient()
-    const{data,isLoading,isFetched}=useQuery({
+    const{data,isLoading,isFetched,refetch}=useQuery({
       queryKey:[url],
       queryFn:async ()=>{
           const res = await apiRequests.get(url)
@@ -23,7 +23,7 @@ export default function useFetch(url) {
     
     console.log(isLoading);
 
-      return [data??[],isLoading]
+      return [data??[],isLoading,refetch]
 }
 
 
