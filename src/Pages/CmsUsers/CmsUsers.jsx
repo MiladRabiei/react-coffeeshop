@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import useFetch from '../../hooks/useFetch'
 import { useMutation } from '@tanstack/react-query';
 import apiRequests from '../../services/axios/Configs/configs';
 import Swal from 'sweetalert2';
 import { useRef } from 'react';
+import AuthContext from '../../Context/AuthContext';
 export default function CmsUsers() {
   let [mainData,isLoading,refetch]=useFetch("/users")
   let [userRole,setUserRole]=useState("costumer")
   let [itemId,setItemId]=useState()
   let [userInfos,setUserInfos]=useState()
   console.log(mainData);
+    let authcontext=useContext(AuthContext)
     let editOverlay=useRef()
     let overlayContent=useRef()
     let showOverlay=useRef()
@@ -39,7 +41,7 @@ export default function CmsUsers() {
     onSuccess:(res)=>{
       console.log("user role edited successfully",res.data);
       Swal.fire({
-        title: "تغییرات شما با موفقیت حذف شد",
+        title: "تغییرات شما با موفقیت ثبت شد",
         icon: "success",
         showConfirmButton:false,
         timer:1500,
@@ -92,10 +94,10 @@ export default function CmsUsers() {
     mutationFn:async(id)=>{
       return apiRequests.delete(`/users/${id}`)
     },
-    onSuccess:(res)=>{
-      console.log("user info deleted successfully",res.data);
+    onSuccess:(res,id)=>{
+      console.log("user info deleted successfully",res.status);
             Swal.fire({
-              title: "محصول شما با موفقیت حذف شد",
+              title: "کاربر شما با موفقیت حذف شد",
               icon: "success",
               showConfirmButton:false,
               timer:1500,
@@ -105,6 +107,10 @@ export default function CmsUsers() {
               }
             });
             refetch()
+            if(authcontext.userInfos.id===id){
+              console.log("deleted user is the logged in user");
+              authcontext.logout()
+            }
     },
     onError:(err)=>{
       console.log("an error occured when deleting user info",err);
@@ -140,7 +146,7 @@ export default function CmsUsers() {
         });
   }
   return (
-    <section className="cmsUsers mt-8">
+    <section className="cmsUsers mt-8 h-full">
       <h2 className="text-3xl font-MorabbaMedium">کاربران</h2>
       <div className="mt-4 mb-8 rounded-lg bg-white p-5 border border-gray-300">
       {mainData.length>0?(

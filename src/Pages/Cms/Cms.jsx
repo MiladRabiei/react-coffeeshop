@@ -26,8 +26,8 @@ export default function Cms() {
     return (
         <>
             {authcontext.isLoggedIn?(
-            <section className='w-full  h-full bg-[#f2f2f2] '>
-                <div className='flex relative'>
+            <section className='w-full  bg-[#f2f2f2] '>
+                <div className='flex relative w-full min-h-screen'>
                     {/* sidebar */}
                     <div ref={mobileMenuElem} className=' fixed w-64 lg:w-[300px] h-screen -right-64 text-white  lg:sticky top-0 z-[15] transition-all'>
                         <div className='h-full w-full rounded-tl-xl rounded-bl-xl bg-orange-300  p-5'>
@@ -88,7 +88,7 @@ export default function Cms() {
                                     <span>صفحه اصلی</span>
                                 </NavLink>
                                 
-                                <button  className='text-red-500 bg-white'>
+                                <button onClick={authcontext.logout}  className='text-red-500 bg-white'>
                                     <svg className='w-7 h-7'>
                                         <use href='#arrow-right-start'></use>
                                     </svg>
@@ -100,7 +100,7 @@ export default function Cms() {
                         </div> 
                     </div>
                     {/* main */}
-                    <div className='flex flex-col gap-y-8 w-full h-full py-6 px-5'>
+                    <div className='w-full h-full flex flex-col gap-y-8  py-6 px-5'>
                         <span className='block lg:hidden' onClick={openMobileMenu}>
                             <svg className='w-6 h-6 text-orange-300'>
                                 <use href='#adjustments-horizontal'></use>

@@ -88,7 +88,7 @@ export default function UserPanel() {
                                     <span>صفحه اصلی</span>
                                 </NavLink>
                                 
-                                <button  className='text-red-500 bg-white'>
+                                <button onClick={authcontext.logout}  className='text-red-500 bg-white'>
                                     <svg className='w-7 h-7'>
                                         <use href='#arrow-right-start'></use>
                                     </svg>

@@ -48,7 +48,7 @@ console.log(formRegisterState);
   let userRegister=event=>{
     event.preventDefault()
     let newUserInfo={
-      id:mainData.length+1,
+      id:1,
       username:formRegisterState.inputs.username.value.trim(),
       email:formRegisterState.inputs.email.value.trim(),
       password:formRegisterState.inputs.password.value.trim(),
@@ -62,6 +62,7 @@ console.log(formRegisterState);
   let isNonExist=mainData.some(item=>{
     return item.email!==newUserInfo.email
   })
+  console.log(newUserInfo);
   if(isNonExist){
     apiRequests.post("/users",{
       ...newUserInfo

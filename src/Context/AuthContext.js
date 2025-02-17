@@ -6,6 +6,7 @@ const AuthContext=createContext({
     userInfos:null,
     setUserInfos:null,
     nameCookie:null,
+    setNameCookie:null,
     shopBasket:[],
     login:()=>{},
     logout:()=>{},

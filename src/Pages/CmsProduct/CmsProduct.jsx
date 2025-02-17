@@ -217,7 +217,7 @@ export default function CmsProduct() {
     
   }
   return (
-    <section className="products mt-8">
+    <section className="products mt-8 min-h-screen">
       <h2 className='font-MorabbaMedium text-3xl'>افزودن محصول جدید</h2>
       <div className="mt-4 mb-8 rounded-lg bg-white p-5 border border-gray-300">
         <form action="">

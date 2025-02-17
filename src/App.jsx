@@ -186,6 +186,7 @@ export default function App() {
           userInfos,
           setUserInfos,
           nameCookie,
+          setNameCookie,
           shopBasket,
           login,
           logout,
@@ -413,7 +414,7 @@ export default function App() {
 
 
         </svg>
-        <div>
+        <div >
           {(!isCmsPage && !is403Page && !isUserPanel) && <Header />}
 
           {Router} {/* Render the routes */}
