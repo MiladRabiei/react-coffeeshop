@@ -27,7 +27,7 @@ export default function UserPanel() {
         <>
             {authcontext.isLoggedIn?(
                 <section className='w-full h-full bg-[#f2f2f2] '>
-                <div className='flex relative'>
+                <div className='flex relative w-full min-h-screen'>
                     {/* sidebar */}
                     <div ref={mobileMenuElem} className=' fixed w-64 lg:w-[300px] h-screen -right-64 text-white  lg:sticky top-0 z-[15] transition-all'>
                         <div className='h-full w-full rounded-tl-xl rounded-bl-xl bg-orange-300  p-5'>

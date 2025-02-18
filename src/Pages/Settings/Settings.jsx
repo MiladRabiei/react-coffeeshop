@@ -43,7 +43,7 @@ export default function Settings() {
       
               <h2 className='mt-8 font-MorabbaMedium text-3xl'>اطلاعات</h2>
               <div className='mt-4 mb-8 bg-white  rounded-lg p-5 border border-gray-300 '>
-              <div className=" font-Dana text-sm grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3  w-full mt-8 gap-x-3 gap-y-3 child:flex child:flex-col child:flex-1 child:gap-y-1 ">
+              <div className=" font-Dana text-sm grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3  w-full  mt-8 gap-x-3 gap-y-3 child:flex child:flex-col child:flex-1 child:gap-y-1 ">
                     <div className='flex flex-col'>
                     <label htmlFor="username">  نام و نام خانوادگی<span className='text-red-500'>*</span></label>
                     <Input

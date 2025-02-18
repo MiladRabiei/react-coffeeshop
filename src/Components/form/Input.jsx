@@ -22,6 +22,14 @@ export default function Input(props) {
         value:props.value?props.value:"",
         isValid:props.value?validator(props.value,props.validations):false
     })
+    useEffect(() => {
+        dispatch({
+          type: 'CHANGE',
+          value:'',
+          validations:"",
+        })
+      }, [props.value])
+
     let {value,isValid}=mainInput
     let {onInputHandler,id}=props
     useEffect(()=>{
@@ -55,7 +63,9 @@ export default function Input(props) {
         className={props.className}
         onChange={changeHandler}
         value={mainInput.value}
-        name="" id=""></textarea>
+        name=""
+         id="">
+        </textarea>
     )
   return (
     <>

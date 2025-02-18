@@ -48,7 +48,7 @@ console.log(formRegisterState);
   let userRegister=event=>{
     event.preventDefault()
     let newUserInfo={
-      id:1,
+      id:mainData.length+1,
       username:formRegisterState.inputs.username.value.trim(),
       email:formRegisterState.inputs.email.value.trim(),
       password:formRegisterState.inputs.password.value.trim(),

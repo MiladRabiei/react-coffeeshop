@@ -54,7 +54,7 @@ export default function Adress() {
               <h2 className='mt-8 font-MorabbaMedium text-3xl'>اطلاعات</h2>
               <div className='mt-4 mb-8 bg-white  rounded-lg p-5 border border-gray-300 '>
               {!authcontext.userInfos?.address?(
-                <div onClick={addData} className={`w-full h-full flex-col text-center items-center justify-center cursor-pointer ${showAddAddress?"flex":"hidden"}`}>
+                <div onClick={addData} className={`w-full h-[300px] flex-col text-center items-center justify-center cursor-pointer ${showAddAddress?"flex":"hidden"}`}>
                   <h2 className='font-MorabbaMedium text-3xl'>اضافه کردن آدرس</h2>
                   <h2 className='text-5xl'>+</h2>
                 </div>

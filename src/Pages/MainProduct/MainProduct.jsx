@@ -12,23 +12,36 @@ import useFetch from '../../hooks/useFetch';
 import Comment from '../../Components/Comment/Comment';
 import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
 import apiRequests from '../../services/axios/Configs/configs';
+import Input from '../../Components/form/Input';
+import useForm from '../../hooks/useForm';
+import { requiredValidator,minValidator,maxValidator } from '../../validators/rules';
+import moment from 'jalali-moment';
+import { useMutation } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function MainProduct() {
   let authContext = useContext(AuthContext)
   console.log(authContext.userInfos.favorites);
   let[count,setCount]=useState(1)
   let params = useParams()
-  let [mainData, setMainData] = useFetch("/products")
+  let [mainData,isLoading,refetch] = useFetch("/products")
+  
   let[fetchComments,setFetchComments]=useState([])
   let[fetchLoading,setFetchLoading]=useState(true)
-  let[likeCount,setLikeCount]=useState(null)
-  let[liked,setLiked]=useState(false)
-  let[disLikeCount,setDisLikeCount]=useState(null)
-  let[disLiked,setDisliked]=useState(false)
-  let[cmID,setCmID]=useState()
+  let[inputValue,setInputValue]=useState()
+  let[areaValue,setAreaValue]=useState()
+  let[suggest,setSuggest]=useState(false)
+  let[notSuggest,setNotSuggest]=useState(false) 
 
+  const jalaliTextDate = moment().locale("fa").format(" jD jMMMM jYYYY");
 
-// handling shopbasket
+  let[commentsFormState,commentsInputHandler]=useForm({
+    commentTitle:{value:"",isValid:false},
+    commentContent:{value:"",isValid:false}
+  },false)
+
+  // handling shopbasket
   
   let mainProduct = mainData.find(item => +item.id=== +params.ProductID.trim())
   let product=mainData.filter(item=>+item.id===+params.ProductID.trim())
@@ -38,6 +51,68 @@ export default function MainProduct() {
   let removeFromShopBox=(id)=>authContext.removefromshopbox(id)
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
+
+console.log(mainProduct);
+// handling adding comment
+let postMutation=useMutation({
+  mutationFn:async(newComment)=>{
+    return apiRequests.post("/comments",{
+      ...newComment
+    })
+  },
+  onSuccess:(res)=>{
+    console.log("successfully added new comment",res);
+    Swal.fire({
+      title: "دیدگاه شما با موفقیت ثبت شد",
+      icon: "success",
+      showConfirmButton:false,
+      timer:1500,
+      position:"top-start",
+      customClass:{
+        title:"text-xl",
+        icon:"text-sm"
+      },
+      
+    });
+    setInputValue("")
+    setSuggest(false)
+    setAreaValue("")
+    refetch()
+  },
+  onError:(err)=>{
+    console.log("an error occured when adding new comment",err);
+    Swal.fire({
+      title: "مشکلی وجود دارد!",
+      icon: "error",
+      showConfirmButton:false,
+      timer:1500,
+      position:"top-start",
+      customClass:{
+        title:"text-xl",
+        icon:"text-sm"
+      }
+    });
+  }
+})
+  let addComment=()=>{
+    let newComment={
+      title:commentsFormState.inputs.commentTitle.value,
+      content:commentsFormState.inputs.commentContent.value,
+      date:jalaliTextDate,
+      id:crypto.randomUUID().slice(-3) + Date.now().toString().slice(-3),
+      isApproved:false,
+      ProductID:+params.ProductID,
+      suggested:suggest,
+      userID:authContext.userInfos.id,
+      username:authContext.userInfos.username,
+      productName:mainProduct?.name,
+      }
+      postMutation.mutate(newComment)
+
+}
+
+
+
   // handling comment logic
 
   useEffect(()=>{
@@ -47,7 +122,7 @@ export default function MainProduct() {
       return res.data
     }).then(data=>{
       console.log(data.comments);
-      setFetchComments(data.comments||[])
+      setFetchComments(data.comments)
       setFetchLoading(false)
     }).catch(err=>{
       console.log(err);
@@ -56,67 +131,7 @@ export default function MainProduct() {
     })
   },[])
 
-  const handleLike = (ID) => {
-    setFetchComments((prevComments) =>
-      prevComments.map((comment) => {
-        if (comment.id === ID) {
-          const userCommentStatus = JSON.parse(localStorage.getItem("userCommentStatus")) || {};
-  
-          // Check if the user already liked or disliked
-          const hasLiked = userCommentStatus[ID]?.liked;
-          const hasDisliked = userCommentStatus[ID]?.disliked;
-  
-          // If the user already liked, do nothing
-          if (hasLiked) return comment;
-  
-          // If user disliked, undo dislike before liking
-          if (hasDisliked) {
-            comment.dislikecount -= 1;  // Decrease dislike count
-            userCommentStatus[ID].disliked = false;  // Remove dislike
-          }
-  
-          // Increase the like count
-          comment.likecount += 1;
-          userCommentStatus[ID] = { liked: true, disliked: false };
-  
-          localStorage.setItem("userCommentStatus", JSON.stringify(userCommentStatus)); // Update the status in local storage
-          return { ...comment, likecount: comment.likecount, dislikecount: comment.dislikecount };
-        }
-        return comment;
-      })
-    );
-  };
-  
-  const handleDisLike = (ID) => {
-    setFetchComments((prevComments) =>
-      prevComments.map((comment) => {
-        if (comment.id === ID) {
-          const userCommentStatus = JSON.parse(localStorage.getItem("userCommentStatus")) || {};
-  
-          // Check if the user already liked or disliked
-          const hasLiked = userCommentStatus[ID]?.liked;
-          const hasDisliked = userCommentStatus[ID]?.disliked;
-  
-          // If the user already disliked, do nothing
-          if (hasDisliked) return comment;
-  
-          // If user liked, undo like before disliking
-          if (hasLiked) {
-            comment.likecount -= 1;  // Decrease like count
-            userCommentStatus[ID].liked = false;  // Remove like
-          }
-  
-          // Increase the dislike count
-          comment.dislikecount += 1;
-          userCommentStatus[ID] = { disliked: true, liked: false };
-  
-          localStorage.setItem("userCommentStatus", JSON.stringify(userCommentStatus)); // Update the status in local storage
-          return { ...comment, likecount: comment.likecount, dislikecount: comment.dislikecount };
-        }
-        return comment;
-      })
-    );
-  };
+
   
   // Sync updates to the server
   useEffect(() => {
@@ -139,6 +154,8 @@ export default function MainProduct() {
   
   }, [fetchComments]);
   
+  // handle favourites logic
+
   let addToFavorites=(id)=>{
     authContext.addtofavorites(id)
   }
@@ -424,31 +441,67 @@ export default function MainProduct() {
             <div className='text-zinc-700 dark:text-white bg-white dark:bg-zinc-700 rounded-lg shadow-normal p-5'>
               <div className='flex items-center gap-x-2 mb-6'>
                 <h2 className='font-MorabbaMedium text-2xl'>دیدگاه ها</h2>
-                <span className='text-sm text-blue-500'>(28 دیدگاه)</span>
+                {mainProduct?.comments?.length>0&&
+                <span className='text-sm text-blue-500'>({mainProduct.comments.length} دیدگاه)</span>
+                }
               </div>
               <div className="flex flex-col items-start lg:flex-row gap-10">
                 <div className='flex flex-col w-full lg:w-1/4 '>
                   {authContext.isLoggedIn?(
                     <>
                     <p className='font-DanaMedium text-lg mb-2'> ثبت دیدگاه</p>
-                    <input type="text" placeholder='عنوان' readOnly className='tailwind-input outline-none border-none' name="" id="" />
+                    <Input
+                    elem="input"
+                    value={inputValue}
+                    id="commentTitle"
+                    className='tailwind-input outline-none border-none dark:text-white '
+                    // className='w-full border-2 rounded-lg bg-white h-10 pr-2 text-zinc-700 outline-none'
+                    type="text"
+                    placeholder="عنوان"
+                    onInputHandler={commentsInputHandler}
+                    validations={[
+                      requiredValidator(),
+                      minValidator(8),
+                      maxValidator(50),
+                    ]}
+                    />
                     <p className='text-gray-500 dark:text-white text-sm mb-4'>این محصول را به دیگران پیشنهاد :</p>
                     <div className='w-full grid grid-cols-2 gap-4 mb-5 child:rounded-lg child:flex-center child:gap-x-2 child:py-2 child:shadow-normal child:font-DanaMedium child:delay-150'>
-                      <button className='text-green-600 ring-transparent ring-1 focus:ring-green-600 dark:ring-white/20 dark:focus:ring-green-600'>
+                      <button onClick={()=>{
+                        setSuggest(true)
+                         setNotSuggest(false)
+                         }} 
+                         className='text-green-600 ring-transparent ring-1 focus:ring-green-600 dark:ring-white/20 dark:focus:ring-green-600'>
                         <svg className='w-5 h-5'>
                           <use href='#hand-up'></use>
                         </svg>
                         میکنم
                       </button>
-                      <button className='text-red-500 ring-transparent ring-1 focus:ring-red-500 dark:ring-white/20 dark:focus:ring-red-500'>
+                      <button onClick={()=>{
+                        setNotSuggest(true)
+                        setSuggest(false)
+                      }} className='text-red-500 ring-transparent ring-1 focus:ring-red-500 dark:ring-white/20 dark:focus:ring-red-500'>
                         <svg className='w-5 h-5'>
                           <use href='#hand-down'></use>
                         </svg>
                         نمیکنم
                       </button>
                     </div>
-                    <textarea placeholder='متن دیدگاه' className='h-24 tailwind-input outline-none border-none' name="" id=""></textarea>
-                    <button className='p-2 bg-orange-300 hover:bg-orange-400 text-white rounded-lg'>ثبت</button>
+                    <Input
+                    elem="textarea"
+                    value={areaValue}
+                    id="commentContent"
+                    className='h-24 tailwind-input outline-none border-none dark:text-white'
+                    type="text"
+                    placeholder="متن دیدگاه"
+                    onInputHandler={commentsInputHandler}
+                    validations={[
+                      requiredValidator(),
+                      minValidator(15),
+                      maxValidator(250),
+                    ]}
+                    />
+                    <button onClick={addComment} disabled={!commentsFormState.isFormValid||!(suggest||notSuggest)} className={`p-2  text-white rounded-lg ${commentsFormState.isFormValid&&(suggest||notSuggest)?"bg-orange-300 hover:bg-orange-400":"bg-gray-400"}`}>ثبت</button>
                     </>
                   ):(
                     <>
@@ -498,7 +551,7 @@ export default function MainProduct() {
                       <CircleSpinner/>
                     ):(
                       <ul className='flex flex-col w-full lg:w-3/4 gap-y-2'>
-                      {fetchComments.length>0&&fetchComments.map(item=>(
+                      {fetchComments.length>0&&fetchComments?.map(item=>(
                       <>
                         <Comment
                         key={item.id}
@@ -510,11 +563,8 @@ export default function MainProduct() {
                         username={item.username}
                         userID={item.userID}
                         ProductID={item.ProductID}
-                        likecount={item.likecount}
-                        dislikecount={item.dislikecount}
                         isapproved={item.isapproved}
-                        handleLike={handleLike}
-                        handleDisLike={handleDisLike}
+                        
                         />
                       </>
                       ))}

@@ -305,7 +305,7 @@ export default function CmsProduct() {
       </div>
 
       <div ref={editOverlay} onClick={(event)=>closeEditOverlay(event)} className=" overlay hidden  fixed inset-0 bg-black/40 z-[15]">
-      <div ref={overlayContent} className="bg-white w-[350px] p-5 flex flex-col gap-y-2 rounded-lg">
+      <div ref={overlayContent} className="bg-white w-[300px] xs:w-[350px] p-5 flex flex-col gap-y-2 rounded-lg">
         <h2 className='font-MorabbaMedium text-2xl text-center'>اطلاعات جدید را وارد نمایید</h2>
         <div className='rounded-lg overflow-hidden '>
           <input className='bg-gray-100 block w-full px-2 h-10 text-zinc-700 outline-none' value={editNameState} onChange={(event)=>setEditNameState(event.target.value)} type="text" placeholder='اسم محصول' />

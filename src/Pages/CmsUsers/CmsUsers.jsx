@@ -185,7 +185,7 @@ export default function CmsUsers() {
          
       </div>
       <div ref={editOverlay} onClick={(event)=>closeEditOverlay(event)} className=" overlay hidden  fixed inset-0 bg-black/40 z-[15]">
-      <div ref={overlayContent} className="bg-white w-[350px] p-5 flex flex-col gap-y-3 rounded-lg">
+      <div ref={overlayContent} className="bg-white w-[300px] xs:w-[350px] p-5 flex flex-col gap-y-3 rounded-lg">
         <h2 className='font-MorabbaMedium text-2xl text-center'>اطلاعات جدید را وارد نمایید</h2>
         
         <div className=' rounded-lg overflow-hidden'>
@@ -203,7 +203,7 @@ export default function CmsUsers() {
       </div>
       </div>
       <div ref={showOverlay} onClick={(event)=>closeShowOverlay(event)} className=" hidden fixed inset-0 bg-black/40 z-[15]">
-      <div ref={showOverlayContent} className="bg-white w-[350px] p-5 rounded-lg ">
+      <div ref={showOverlayContent} className="bg-white w-[300px] xs:w-[350px] p-5 rounded-lg ">
       {userInfos?.map(item=>(
         <div className='child:border-b child:border-gray-300 flex flex-col gap-y-3 child:w-full' key={item.id}>
       {item.username&&<p>{item?.username}</p>}
