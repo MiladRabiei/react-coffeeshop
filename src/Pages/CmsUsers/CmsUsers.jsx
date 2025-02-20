@@ -5,6 +5,7 @@ import apiRequests from '../../services/axios/Configs/configs';
 import Swal from 'sweetalert2';
 import { useRef } from 'react';
 import AuthContext from '../../Context/AuthContext';
+import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
 export default function CmsUsers() {
   let [mainData,isLoading,refetch]=useFetch("/users")
   let [userRole,setUserRole]=useState("costumer")
@@ -149,38 +150,42 @@ export default function CmsUsers() {
     <section className="cmsUsers mt-8 h-full">
       <h2 className="text-3xl font-MorabbaMedium">کاربران</h2>
       <div className="mt-4 mb-8 rounded-lg bg-white p-5 border border-gray-300">
-      {mainData.length>0?(
-        <table className='w-full border-separate border-spacing-y-3'>
-          <thead className=''>
-          <tr className='bg-orange-300 text-white px-2 '>
-            <th>اسم</th>
-            <th>تلفن</th>
-            <th>سمت</th>
-            <th>عملیات</th>
-          </tr>
-          </thead>
-          
-            <tbody className='w-full '>
-            {mainData?.map(item=>(
-            <tr className='child:text-center child:text-xs child:md:text-base text-center  h-10' key={item.id}>
-              <td>{item.username}</td>
-              <td>{item.phonenumber}</td>
-              <td>{item.role}</td>
-              <td className=' flex flex-col xs:flex-row justify-around gap-y-1 gap-x-1'>
-                <button onClick={()=>changeUserRole(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-[90px] text-white  rounded-lg'>تغییر سمت</button>
-                <button onClick={()=>showUserInfo(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>جزییات </button>
-                <button onClick={()=>deleteUserInfo(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>حذف</button>
-              </td>
-
+      {isLoading?(
+        <CircleSpinner/>
+      ):(
+        mainData.length>0?(
+          <table className='w-full border-separate border-spacing-y-3'>
+            <thead className=''>
+            <tr className='bg-orange-300 text-white px-2 '>
+              <th>اسم</th>
+              <th>تلفن</th>
+              <th>سمت</th>
+              <th>عملیات</th>
             </tr>
-          ))}
-          </tbody>
-          </table>
-        ):(
-        <div className="flex-center">
-        <h2 className="text-3xl font-MorabbaMedium text-center">هیچ کاربری وجود ندارد</h2>
-        </div>
-        )}
+            </thead>
+            
+              <tbody className='w-full '>
+              {mainData?.map(item=>(
+              <tr className='child:text-center child:text-xs child:md:text-base text-center  h-10' key={item.id}>
+                <td>{item.username}</td>
+                <td>{item.phonenumber}</td>
+                <td>{item.role}</td>
+                <td className=' flex flex-col xs:flex-row justify-around gap-y-1 gap-x-1'>
+                  <button onClick={()=>changeUserRole(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-[90px] text-white  rounded-lg'>تغییر سمت</button>
+                  <button onClick={()=>showUserInfo(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>جزییات </button>
+                  <button onClick={()=>deleteUserInfo(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>حذف</button>
+                </td>
+  
+              </tr>
+            ))}
+            </tbody>
+            </table>
+          ):(
+          <div className="flex-center">
+          <h2 className="text-3xl font-MorabbaMedium text-center">هیچ کاربری وجود ندارد</h2>
+          </div>
+          )
+      )}
          
          
       </div>

@@ -4,11 +4,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import apiRequests from '../../services/axios/Configs/configs'
 import Swal from 'sweetalert2'
 import AuthContext from '../../Context/AuthContext'
-
+import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner'
 
 export default function CmsComments() {
   let authcontext=useContext(AuthContext)
-  let[mainData]=useFetch("/comments")
+  let[mainData,isLoading]=useFetch("/comments")
   let[productData]=useFetch("/products")
   let[userData]=useFetch("/users")
   let[userComment,setUserComment]=useState()
@@ -266,47 +266,53 @@ export default function CmsComments() {
     }
     patchMutation.mutate({approval,itemId})
   }
+  console.log(isLoading);
   return (
     <section className="cmsUsers mt-8 h-full">
       <h2 className="text-3xl font-MorabbaMedium">کامنت ها</h2>
       <div className={`mt-4 mb-8 rounded-lg bg-white p-5 border border-gray-300 ${!mainData.length>0&&"h-[350px] flex-center"}`}>
-      {mainData.length>0?(
-        <table className='w-full border-separate border-spacing-y-3'>
-          <thead className=''>
-          <tr className='bg-orange-300 text-white px-2 whitespace-nowrap'>
-            <th>اسم کاربر</th>
-            <th>محصول</th>
-            <th>کامنت</th>
-            <th>تاریخ</th>
-            <th>عملیات</th>
-          </tr>
-          </thead>
-          
-            <tbody className='w-full '>
-            {mainData?.map(item=>(
-            <tr className='child:text-center child:text-xs child:md:text-base text-center  h-10' key={item.id}>
-              <td>{item.username}</td>
-              <td>{item?.productName}</td>
-              <td>
-              <button onClick={()=>showCommenttext(item.id)} className='hidden xs:block p-2 bg-orange-300 w-[70px] sm:w-24 text-white  rounded-lg'>دیدن متن</button>
-              <button onClick={()=>showCommenttext(item.id)} className='xs:hidden p-2 bg-orange-300 w-[50px]  text-white  rounded-lg'>متن</button>
-              </td>
-              <td>{item.date}</td>
-              <td className=' flex flex-col xs:flex-row xs:justify-around xs:items-end gap-y-1 gap-x-1'>
-                <button onClick={()=>deleteComment(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>حذف</button>
-                <button onClick={()=>showEditComment(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>ویرایش </button>
-                <button onClick={()=>approveComment(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>تایید</button>
-              </td>
-
+      {
+      isLoading?(
+        <CircleSpinner/>
+      ):(
+        mainData.length>0?(
+          <table className='w-full border-separate border-spacing-y-3'>
+            <thead className=''>
+            <tr className='bg-orange-300 text-white px-2 whitespace-nowrap'>
+              <th>اسم کاربر</th>
+              <th>محصول</th>
+              <th>کامنت</th>
+              <th>تاریخ</th>
+              <th>عملیات</th>
             </tr>
-          ))}
-          </tbody>
-          </table>
-        ):(
-        <div className=" ">
-        <h2 className=" w-full text-3xl font-MorabbaMedium text-center ">هیچ کامنتی وجود ندارد</h2>
-        </div>
-        )}
+            </thead>
+            
+              <tbody className='w-full '>
+              {mainData?.map(item=>(
+              <tr className='child:text-center child:text-xs child:md:text-base text-center  h-10' key={item.id}>
+                <td>{item.username}</td>
+                <td>{item?.productName}</td>
+                <td>
+                <button onClick={()=>showCommenttext(item.id)} className='hidden xs:block p-2 bg-orange-300 w-[70px] sm:w-24 text-white  rounded-lg'>دیدن متن</button>
+                <button onClick={()=>showCommenttext(item.id)} className='xs:hidden p-2 bg-orange-300 w-[50px]  text-white  rounded-lg'>متن</button>
+                </td>
+                <td>{item.date}</td>
+                <td className=' flex flex-col xs:flex-row xs:justify-around xs:items-end gap-y-1 gap-x-1'>
+                  <button onClick={()=>deleteComment(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>حذف</button>
+                  <button onClick={()=>showEditComment(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>ویرایش </button>
+                  <button onClick={()=>approveComment(item.id)} className='p-2 bg-orange-300 w-[50px] sm:w-20 text-white  rounded-lg'>تایید</button>
+                </td>
+  
+              </tr>
+            ))}
+            </tbody>
+            </table>
+          ):(
+          <div className=" ">
+          <h2 className=" w-full text-3xl font-MorabbaMedium text-center ">هیچ کامنتی وجود ندارد</h2>
+          </div>
+          )
+      )}
          
          
       </div>

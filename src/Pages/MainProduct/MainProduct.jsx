@@ -104,7 +104,7 @@ let postMutation=useMutation({
       title:commentsFormState.inputs.commentTitle.value,
       content:commentsFormState.inputs.commentContent.value,
       date:jalaliTextDate,
-      miladiDate:moment.format("YYYY-MM-DD"),
+      miladiDate:moment().format("YYYY-MM-DD"),
       id:crypto.randomUUID().slice(-3) + Date.now().toString().slice(-3),
       isApproved:false,
       ProductID:+params.ProductID,

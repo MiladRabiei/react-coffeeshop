@@ -7,6 +7,7 @@ import Button from '../../Components/form/Button'
 import useFetch from '../../hooks/useFetch'
 import AuthContext from '../../Context/AuthContext'
 import apiRequests from '../../services/axios/Configs/configs'
+import Swal from 'sweetalert2'
 export default function LoginAndRegister() {
 
   let navigate=useNavigate()
@@ -39,11 +40,32 @@ console.log(formRegisterState);
       }
     })
     console.log(userInfo);
-    if(userInfo.length>0){{
+    if(userInfo.length>0){
       authContext.login(userInfo[0])
+            Swal.fire({
+              title: " شما با موفقیت وارد شدید",
+              icon: "success",
+              showConfirmButton:false,
+              timer:1500,
+              customClass:{
+                title:"text-xl",
+                icon:"text-sm"
+              }
+            });
       navigate("/Home")
+    }else{
+      Swal.fire({
+        title: "آدرس ایمیل یا رمز عبور شما اشتباه است",
+        icon: "error",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
     }
-  }
+  
 }
   let userRegister=event=>{
     event.preventDefault()
@@ -73,8 +95,29 @@ console.log(formRegisterState);
     .then(result=>{
       console.log(result);
       authContext.login(newUserInfo)
+            Swal.fire({
+              title: "اطلاعات شما با موفقیت ثبت شد",
+              icon: "success",
+              showConfirmButton:false,
+              timer:1500,
+              customClass:{
+                title:"text-xl",
+                icon:"text-sm"
+              }
+            });
       navigate("/Home")
     })
+  }else{
+          Swal.fire({
+            title: "این آدرس ایمیل از قبل ثبت شده است",
+            icon: "error",
+            showConfirmButton:false,
+            timer:1500,
+            customClass:{
+              title:"text-xl",
+              icon:"text-sm"
+            }
+          });
   }
 
   }

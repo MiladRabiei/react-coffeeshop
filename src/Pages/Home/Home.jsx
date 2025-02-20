@@ -848,7 +848,7 @@ export default function Home() {
                 </div>
                 {/* item-caption */}
                 <div className='w-full flex flex-col sm:flex-row items-start justify-between'>
-                  <NavLink className='font-DanaMedium md:font-Dana text-sm/7 line-clamp-2 lg:text-lg ml-1.5 sm:ml-0 mt-2.5 sm:mt-0  md:max-w-[193px] text-zinc-700 dark:text-white '>طرز تهیه قهوه دالگونا مناسب روز‌های کرونایی</NavLink>
+                  <NavLink to={"article-info/1"} className='font-DanaMedium md:font-Dana text-sm/7 line-clamp-2 lg:text-lg ml-1.5 sm:ml-0 mt-2.5 sm:mt-0  md:max-w-[193px] text-zinc-700 dark:text-white '>طرز تهیه قهوه دالگونا مناسب روز‌های کرونایی</NavLink>
                   <div className='hidden sm:flex gap-5'>
                     <span className="hidden lg:block w-px h-[61px] bg-gray-100 dark:bg-white/10 "></span>
                     <div className='flex flex-col ml-3 lg:ml-[18px] -mt-1 text-teal-600 dark:text-emerald-500 text-sm text-left '>

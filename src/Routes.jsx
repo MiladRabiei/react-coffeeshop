@@ -25,11 +25,14 @@ import CmsProduct from "./Pages/cmsProduct/CmsProduct"
 import CmsOrders from "./Pages/CmsOrders/CmsOrders"
 import CmsUsers from "./Pages/CmsUsers/CmsUsers"
 import CmsDocuments from "./Pages/CmsDocuments/CmsDocuments"
+import Mainarticle from "./Pages/Mainarticle/Mainarticle"
 let routes = [
     { path: "/", element: <Navigate to="/home" replace /> },
     { path: "/home", element: <Home /> },
     { path: "/store", element: <Store /> },
     { path: "/shop", element: <Shop/> },
+    { path: "/articles", element: <Shop/> },
+    { path: "/article-info/:articleID", element: <Mainarticle/> },
     { path:"/checkout",element:<CheckOut/>},
     { path: "/about-us", element: <AboutUs /> },
     { path: "/blog", element: <Blog /> },

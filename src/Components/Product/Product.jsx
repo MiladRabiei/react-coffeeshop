@@ -39,7 +39,7 @@ export default function Product({id,name, off, src, count, price }) {
                 </span>
                 )}
                 </div>
-                <Link to={`/Product-info/${id}`} className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
+                <Link to={`/Product-info/${id}`} className={`font-DanaMedium h-10 md:h-14 text-zinc-700 ${!isFavoritesPage&&"dark:text-white"} text-sm md:text-xl line-clamp-2`}>
                     {name}
                 </Link>
                 {
@@ -56,7 +56,7 @@ export default function Product({id,name, off, src, count, price }) {
                                                 </div>
                                                 <div className='offer '>
                                                     <span className='text-xs md:text-xl'>{price.toLocaleString()}</span>
-                                                    <span className='hidden lg:inline text-xs md:text-sm tracking-tighter'>تومان</span>
+                                                    <span className='hidden lg:inline-block text-xs md:text-sm tracking-tighter'>تومان</span>
                                                 </div>
                                             </>
                                         ) : (
