@@ -21,7 +21,8 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "sweetalert2": "^11.17.1",
-    "swiper": "^11.1.15"
+    "swiper": "^11.1.15",
+    "typewriter-effect": "^2.21.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

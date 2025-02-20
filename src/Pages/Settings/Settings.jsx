@@ -4,6 +4,7 @@ import { minValidator,maxValidator,emailValidator,requiredValidator } from '../.
 import Input from '../../Components/form/Input'
 import useForm from '../../hooks/useForm'
 import apiRequests from '../../services/axios/Configs/configs'
+import Swal from 'sweetalert2'
 export default function Settings() {
     let[formSettingsState,settingsInputHandler]=useForm({
       username:{value:"",isValid:false},
@@ -33,9 +34,28 @@ export default function Settings() {
       const data=await response.data
       console.log("userinfos updated successfully",data);
       authcontext.setUserInfos(prevState=>({...prevState,...data}))
-
-    }catch(err){
+      Swal.fire({
+        title: "اطلاعات شما با موفقیت ثبت شد",
+        icon: "success",
+        showConfirmButton:false,
+        timer:1500,
+        customClass:{
+          title:"text-xl",
+          icon:"text-sm"
+        }
+      });
+      }catch(err){
       console.log("error updating user infos",err);
+      Swal.fire({
+              title: "مشکلی وجود دارد!",
+              icon: "error",
+              showConfirmButton:false,
+              timer:1500,
+              customClass:{
+                title:"text-xl",
+                icon:"text-sm"
+              }
+            });
     }
   }
   return (

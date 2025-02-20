@@ -22,13 +22,17 @@ export default function Input(props) {
         value:props.value?props.value:"",
         isValid:props.value?validator(props.value,props.validations):false
     })
+    console.log(props.pathname);
     useEffect(() => {
-        dispatch({
-          type: 'CHANGE',
-          value:'',
-          validations:"",
-        })
-      }, [props.value])
+        if(props?.pathname){
+            dispatch({
+                type: 'CHANGE',
+                value:'',
+                validations:props.validations,
+                isValid:false
+              })
+        }
+      }, [props.value,props.pathname])
 
     let {value,isValid}=mainInput
     let {onInputHandler,id}=props

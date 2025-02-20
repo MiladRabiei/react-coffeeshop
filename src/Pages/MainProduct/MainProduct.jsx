@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 // import required modules
 import { Pagination } from 'swiper/modules';
 import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import AuthContext from '../../Context/AuthContext';
 import useFetch from '../../hooks/useFetch';
 import Comment from '../../Components/Comment/Comment';
@@ -22,18 +22,22 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export default function MainProduct() {
   let authContext = useContext(AuthContext)
-  console.log(authContext.userInfos.favorites);
   let[count,setCount]=useState(1)
   let params = useParams()
+  let location=useLocation()
+  console.log(location.pathname);
   let [mainData,isLoading,refetch] = useFetch("/products")
-  
+  let [isMainProductPage,setIsMainProductPage]=useState(location.pathname.includes("/Product-info/"))
   let[fetchComments,setFetchComments]=useState([])
   let[fetchLoading,setFetchLoading]=useState(true)
   let[inputValue,setInputValue]=useState()
   let[areaValue,setAreaValue]=useState()
   let[suggest,setSuggest]=useState(false)
   let[notSuggest,setNotSuggest]=useState(false) 
-
+  let[displayComments,setDisplayComments]=useState()
+  let[counter,setCounter]=useState(1)
+  let[loading,setLoading]=useState(false)
+  let productPerLoad=3
   const jalaliTextDate = moment().locale("fa").format(" jD jMMMM jYYYY");
 
   let[commentsFormState,commentsInputHandler]=useForm({
@@ -42,7 +46,6 @@ export default function MainProduct() {
   },false)
 
   // handling shopbasket
-  
   let mainProduct = mainData.find(item => +item.id=== +params.ProductID.trim())
   let product=mainData.filter(item=>+item.id===+params.ProductID.trim())
   let productInBasket =authContext.shopBasket&& authContext.shopBasket.filter(item => +item.id == +params.ProductID)
@@ -53,7 +56,9 @@ export default function MainProduct() {
   let decreaseCount=(id)=>authContext.decreasecount(id)
 
 console.log(mainProduct);
+
 // handling adding comment
+
 let postMutation=useMutation({
   mutationFn:async(newComment)=>{
     return apiRequests.post("/comments",{
@@ -99,6 +104,7 @@ let postMutation=useMutation({
       title:commentsFormState.inputs.commentTitle.value,
       content:commentsFormState.inputs.commentContent.value,
       date:jalaliTextDate,
+      miladiDate:moment.format("YYYY-MM-DD"),
       id:crypto.randomUUID().slice(-3) + Date.now().toString().slice(-3),
       isApproved:false,
       ProductID:+params.ProductID,
@@ -158,6 +164,42 @@ let postMutation=useMutation({
 
   let addToFavorites=(id)=>{
     authContext.addtofavorites(id)
+  }
+  
+  //handle load more comment
+
+  useEffect(() => {
+      let firstComments = [...fetchComments.slice(0,3)]
+    setDisplayComments([...firstComments])
+  
+  }, [fetchComments])
+  
+  useEffect(() => {
+    if (counter > 1) {
+      let start = counter * productPerLoad - productPerLoad
+      let end = start + productPerLoad
+      if (start < mainData.length) {
+        let newComments = fetchComments.slice(start, end)
+        setDisplayComments([...displayComments, ...newComments])
+      }
+  
+    }
+  }, [counter])
+  
+  useEffect(() => {
+    let fetchTimer;
+    if (loading) {
+      fetchTimer = setTimeout(() => {
+        setLoading(false)
+        setCounter(prev => prev + 1)
+  
+      }, 1000)
+    }
+    return () => clearTimeout(fetchTimer)
+  }, [loading])
+  
+  let loadMoreComments = () => {
+    setLoading(true)
   }
   
 
@@ -464,6 +506,7 @@ let postMutation=useMutation({
                       minValidator(8),
                       maxValidator(50),
                     ]}
+                    pathname={isMainProductPage}
                     />
                     <p className='text-gray-500 dark:text-white text-sm mb-4'>این محصول را به دیگران پیشنهاد :</p>
                     <div className='w-full grid grid-cols-2 gap-4 mb-5 child:rounded-lg child:flex-center child:gap-x-2 child:py-2 child:shadow-normal child:font-DanaMedium child:delay-150'>
@@ -500,6 +543,7 @@ let postMutation=useMutation({
                       minValidator(15),
                       maxValidator(250),
                     ]}
+                    pathname={isMainProductPage}
                     />
                     <button onClick={addComment} disabled={!commentsFormState.isFormValid||!(suggest||notSuggest)} className={`p-2  text-white rounded-lg ${commentsFormState.isFormValid&&(suggest||notSuggest)?"bg-orange-300 hover:bg-orange-400":"bg-gray-400"}`}>ثبت</button>
                     </>
@@ -551,7 +595,7 @@ let postMutation=useMutation({
                       <CircleSpinner/>
                     ):(
                       <ul className='flex flex-col w-full lg:w-3/4 gap-y-2'>
-                      {fetchComments.length>0&&fetchComments?.map(item=>(
+                      {fetchComments.length>0&&displayComments?.map(item=>(
                       <>
                         <Comment
                         key={item.id}
@@ -564,15 +608,18 @@ let postMutation=useMutation({
                         userID={item.userID}
                         ProductID={item.ProductID}
                         isapproved={item.isapproved}
-                        
                         />
                       </>
                       ))}
                         
                         {fetchComments.length>3&&(
-                        <button className='flex-center gap-x-1 my-4 text-orange-300 font-DanaMedium'>
+                        loading?(
+                          <CircleSpinner/>
+                        ):(
+                          <button onClick={loadMoreComments} className={`${displayComments?.length < fetchComments?.length?"flex-center":"hidden"} gap-x-1 my-4 text-orange-300 font-DanaMedium`}>
                           مشاهده بیشتر ...
                         </button>
+                        )
                         )}
                       </ul>
                     )

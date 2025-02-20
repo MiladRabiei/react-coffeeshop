@@ -469,6 +469,14 @@ export default function Header() {
                             <span className='inline-block font-DanaMedium'>{authContext.nameCookie}</span>
                         </NavLink>
                         )}
+                        {authContext.userInfos&&authContext.userInfos.role === "admin"&&(
+                            <NavLink to="Cms/products" className="inline-flex items-center gap-x-2 ">
+                            <svg className='w-5 h-5'>
+                                <use href='#desktop'></use>
+                            </svg>
+                            پنل مدیریت
+                        </NavLink>
+                        )}
                         <div>
                             <span className="inline-flex  items-center gap-x-2 dark:hidden cursor-pointer" onClick={changeThemeColor}>
                                 <svg className='w-5 h-5'>

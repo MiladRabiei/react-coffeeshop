@@ -60,13 +60,6 @@ export default function Cms() {
                                      کاربران 
                                 </NavLink>
                                 
-                                <NavLink to={"discounts"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700 first:text-orange-500"}>
-                                    <svg className='w-7 h-7'>
-                                        <use href='#discount'></use>
-                                    </svg>
-                                    تخفیف ها
-                                </NavLink>
-                                
                                 <NavLink to={"documents"} className={link=>link.isActive?"bg-orange-400/30":"bg-white text-zinc-700 first:text-orange-500"}>
                                     <svg className='w-7 h-7'>
                                         <use href='#documents'></use>

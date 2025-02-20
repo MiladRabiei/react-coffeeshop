@@ -1,12 +1,10 @@
 import React, { useContext, useState } from 'react'
 import AuthContext from '../../Context/AuthContext'
 import { useLocation } from 'react-router-dom'
-
-export default function Comment({id,title,suggested,content,date,username,userID,productID,likecount,dislikecount,isapproved,}) {
+export default function Comment({id,title,suggested,content,date,username,userID,productID,isapproved,productName}) {
     let authContext=useContext(AuthContext)
     let location=useLocation()
     let isUserPanelPage=location.pathname==="/userpanel/comments"
-
     return (
         <>
             <li className='py-4 border-b border-gray-200 child:border-white/20'>
@@ -37,7 +35,11 @@ export default function Comment({id,title,suggested,content,date,username,userID
                         <span>{date}</span>
                         <span>{username}</span>
                     </div>
+                    {isUserPanelPage&&
+                    <div className='flex items-center gap-x-2 mt-2'>
+                    <p className='text-gray-400 text-sm'>{productName}</p>
                     
+                </div>}
                 </div>
             </li>
         </>

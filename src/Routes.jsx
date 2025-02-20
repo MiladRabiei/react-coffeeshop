@@ -24,7 +24,6 @@ import CmsComments from "./Pages/CmsComments/CmsComments"
 import CmsProduct from "./Pages/cmsProduct/CmsProduct"
 import CmsOrders from "./Pages/CmsOrders/CmsOrders"
 import CmsUsers from "./Pages/CmsUsers/CmsUsers"
-import CmsDiscounts from "./Pages/CmsDiscounts/CmsDiscounts"
 import CmsDocuments from "./Pages/CmsDocuments/CmsDocuments"
 let routes = [
     { path: "/", element: <Navigate to="/home" replace /> },
@@ -43,7 +42,6 @@ let routes = [
             {path:"products",element:<CmsProduct/>},
             {path:"orders",element:<CmsOrders/>},
             {path:"users",element:<CmsUsers/>},
-            {path:"discounts",element:<CmsDiscounts/>},
             {path:"documents",element:<CmsDocuments/>},
             {path:"comments",element:<CmsComments/>},
         ]},

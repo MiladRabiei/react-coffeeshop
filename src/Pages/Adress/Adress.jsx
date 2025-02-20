@@ -4,7 +4,7 @@ import Input from '../../Components/form/Input'
 import { requiredValidator,maxValidator,minValidator } from '../../validators/rules'
 import useForm from '../../hooks/useForm'
 import apiRequests from '../../services/axios/Configs/configs'
-
+import Swal from 'sweetalert2'
 export default function Adress() {
   let authcontext=useContext(AuthContext)
   let [showAddAddress,setShowAddAddress]=useState(true)
@@ -40,12 +40,32 @@ export default function Adress() {
         })
   
         const data=await response.data
-        console.log("userinfos updated successfully",data);
+        console.log("user address updated successfully",data);
         authcontext.setUserInfos(prevState=>({...prevState,...data}))
+        Swal.fire({
+                title: "اطلاعات شما با موفقیت ثبت شد",
+                icon: "success",
+                showConfirmButton:false,
+                timer:1500,
+                customClass:{
+                  title:"text-xl",
+                  icon:"text-sm"
+                }
+              });
         setShowAddData(false)
         setShowAddress(true)
       }catch(err){
-        console.log("error updating user infos",err);
+        console.log("error adding user address",err);
+        Swal.fire({
+                title: "مشکلی وجود دارد!",
+                icon: "error",
+                showConfirmButton:false,
+                timer:1500,
+                customClass:{
+                  title:"text-xl",
+                  icon:"text-sm"
+                }
+              });
       }
     }
   return (

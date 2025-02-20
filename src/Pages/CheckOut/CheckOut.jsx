@@ -5,7 +5,7 @@ import Input from '../../Components/form/Input'
 import useForm from '../../hooks/useForm'
 import { emailValidator, maxValidator, minValidator, requiredValidator } from '../../validators/rules'
 import apiRequests from '../../services/axios/Configs/configs'
-
+import Swal from 'sweetalert2'
 export default function CheckOut() {
  
   let[formCheckoutState,checkoutInputHandler]=useForm({
@@ -65,8 +65,31 @@ export default function CheckOut() {
       const data=await response.data
       console.log("userinfos updated successfully",data);
       authcontext.setUserInfos(prevState=>({...prevState,...data}))
+      Swal.fire({
+            title: "اطلاعات شما با موفقیت ثبت شد",
+            icon: "success",
+            showConfirmButton:false,
+            timer:1500,
+            position:"top-start",
+            customClass:{
+              title:"text-xl",
+              icon:"text-sm"
+            },
+            
+          })
     }catch(err){
       console.log("error updating user infos",err);
+          Swal.fire({
+            title: "مشکلی وجود دارد!",
+            icon: "error",
+            showConfirmButton:false,
+            timer:1500,
+            position:"top-start",
+            customClass:{
+              title:"text-xl",
+              icon:"text-sm"
+            }
+          });
     }
   }
 

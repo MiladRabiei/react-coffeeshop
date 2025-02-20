@@ -10,9 +10,10 @@ import Product from '../../Components/Product/Product';
 import moment from 'jalali-moment';
 import useFetch from '../../hooks/useFetch';
 import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
+import Typewriter from 'typewriter-effect'
 
 export default function Home() {
-  let [mainData,loading] = useFetch("/products")
+  let [mainData, loading] = useFetch("/products")
   let [products, setProducts] = useState([])
   let [randomNumbers, setRandomNumbers] = useState([])
   const nextButtonRef = useRef(null);
@@ -34,7 +35,7 @@ export default function Home() {
 
   useEffect(() => {
     let numArray = new Set()
-    for (let i = 0; numArray.size<8; i++) {
+    for (let i = 0; numArray.size < 8; i++) {
       const number = Math.floor(Math.random() * 20);
       numArray.add(number)
     }
@@ -65,8 +66,50 @@ export default function Home() {
           <div className="container relative overflow-y-hidden h-full md:min-h-screen flex justify-end items-center">
 
             <div className='text-white'>
-              <h2 className='font-MorabbaBold text-2xl md:text-6xl/[62px] mb-0.5 md:mb-2'>قهوه عربیکا تانزانیا</h2>
-              <span className='font-MorabbaLight text-xl md:text-5xl/[64px]'>یک فنجان بالانس!</span>
+              <h2 className='font-MorabbaBold text-2xl md:text-6xl/[62px] mb-0.5 md:mb-2'>
+                <Typewriter
+                  onInit={(typewriter) => {
+                    typewriter.typeString('قهوه عربیکا تانزانیا')
+                      .start()
+                      .pauseFor(2500)
+                      .deleteAll()
+                      .typeString('قهوه کلمبیا کاتورا')
+                      .start()
+                      .pauseFor(2500)
+                      .deleteAll()
+                      .typeString('قهوه برزیل بوربون')
+                      .start()
+                      .pauseFor(2500)
+                      .deleteAll()
+                      
+                  }}
+                  options={{
+                    loop:true,
+                  }}
+                />
+              </h2>
+              <span className='font-MorabbaLight text-xl md:text-5xl/[64px]'>
+              <Typewriter
+                  onInit={(typewriter) => {
+                    typewriter.typeString("یک فنجان بالانس!")
+                      .start()
+                      .pauseFor(2500)
+                      .deleteAll()
+                      .typeString('یک فنجان انرژی!')
+                      .start()
+                      .pauseFor(2500)
+                      .deleteAll()
+                      .typeString('یک فنجان آرامش!')
+                      .start()
+                      .pauseFor(2500)
+                      .deleteAll()
+                      
+                  }}
+                  options={{
+                    loop:true,
+                  }}
+                />
+              </span>
               <span className='block w-[100px] h-px md:h-0.5 bg-orange-300 my-3 md:my-8'></span>
               <p className='text-xs max-w-[201px] md:max-w-[460px] md:text-2xl'>قطعا نام آشنای عربیکارا شنیده اید.عربیکا یکی از گونه های قهوه است که در نواحی مختلف کمربند قهوه کشن میشود.</p>
             </div>
@@ -108,12 +151,12 @@ export default function Home() {
               }
             />
             {/* section body */}
-            <div className={`${loading&&"flex-center mt-20"} grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-5 `}>
-              {loading?(
+            <div className={`${loading && "flex-center mt-20"} grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-5 `}>
+              {loading ? (
                 <div >
-                  <CircleSpinner/>
+                  <CircleSpinner />
                 </div>
-              ):(
+              ) : (
                 products.map(item => (
                   <div key={item.id}>
                     <Product
@@ -127,7 +170,7 @@ export default function Home() {
                   </div>
                 ))
               )}
-              
+
 
 
 
@@ -155,23 +198,23 @@ export default function Home() {
             <div className="flex-center gap-y-6 gap-x-[29px] md:gap-[65px] flex-wrap">
               <ProductsCategory
                 title="قهوه دمی و اسپرسو"
-                src={import.meta.env.BASE_URL+"/images/categories/category1.png"}
+                src={import.meta.env.BASE_URL + "/images/categories/category1.png"}
               />
               <ProductsCategory
                 title="قهوه دمی و اسپرسو"
-                src={import.meta.env.BASE_URL+"/images/categories/category2.png"}
+                src={import.meta.env.BASE_URL + "/images/categories/category2.png"}
               />
               <ProductsCategory
                 title="قهوه دمی و اسپرسو"
-                src={import.meta.env.BASE_URL+"/images/categories/category3.png"}
+                src={import.meta.env.BASE_URL + "/images/categories/category3.png"}
               />
               <ProductsCategory
                 title="قهوه دمی و اسپرسو"
-                src={import.meta.env.BASE_URL+"/images/categories/category4.png"}
+                src={import.meta.env.BASE_URL + "/images/categories/category4.png"}
               />
               <ProductsCategory
                 title="قهوه دمی و اسپرسو"
-                src={import.meta.env.BASE_URL+"/images/categories/category5.png"}
+                src={import.meta.env.BASE_URL + "/images/categories/category5.png"}
               />
             </div>
           </div>
@@ -221,7 +264,7 @@ export default function Home() {
               navigation={false}
               pagination={{ clickable: true }}
               scrollbar={{ draggable: true }}
-              
+
               autoplay={{
                 delay: 1500,
                 disableOnInteraction: false,
@@ -230,7 +273,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p1.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p1.png"} className='w-32 mx-auto md:w-auto' alt="" />
                     <span className='absolute top-1.5 right-1.5 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-2.5 md:px-3.5  rounded-full '>12%</span>
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
@@ -283,7 +326,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p2.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p2.png"} className='w-32 mx-auto md:w-auto' alt="" />
 
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
@@ -332,7 +375,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p3.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p3.png"} className='w-32 mx-auto md:w-auto' alt="" />
                     <span className='absolute top-1.5 right-1.5 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-2.5 md:px-3.5  rounded-full '>12%</span>
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
@@ -381,7 +424,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p4.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p4.png"} className='w-32 mx-auto md:w-auto' alt="" />
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
                     قهوه ترک بن مانو مقدار 250 گرم
@@ -430,7 +473,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p5.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p5.png"} className='w-32 mx-auto md:w-auto' alt="" />
                     <span className='absolute top-1.5 right-1.5 block h-5 md:h-[30px]  text-xs/[24px] md:text-base/[34px] font-DanaDemiBold bg-orange-300 text-white dark:text-zinc-700 px-2.5 md:px-3.5  rounded-full '>12%</span>
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
@@ -483,7 +526,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p6.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p6.png"} className='w-32 mx-auto md:w-auto' alt="" />
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
                     قهوه ترک بن مانو مقدار 250 گرم
@@ -531,7 +574,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p7.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p7.png"} className='w-32 mx-auto md:w-auto' alt="" />
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
                     قهوه ترک بن مانو مقدار 250 گرم
@@ -580,7 +623,7 @@ export default function Home() {
               <SwiperSlide>
                 <div className='p-2 md:p-5 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                   <div className='relative mb-2 md:mb-5'>
-                    <img src={import.meta.env.BASE_URL+"/images/products/p8.png"} className='w-32 mx-auto md:w-auto' alt="" />
+                    <img src={import.meta.env.BASE_URL + "/images/products/p8.png"} className='w-32 mx-auto md:w-auto' alt="" />
                   </div>
                   <h5 className="font-DanaMedium h-10 md:h-14 text-zinc-700 dark:text-white text-sm md:text-xl line-clamp-2">
                     قهوه ترک بن مانو مقدار 250 گرم
@@ -634,7 +677,7 @@ export default function Home() {
           <div className="container">
             <div className='flex flex-wrap lg:flex-nowrap items-center lg:gap-x-4 xl:gap-x-24 gap-y-9 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white lg:h-36 py-8 lg:py-0 px-3 lg:px-5 xl:px-11 rounded-2xl'>
               <div className='flex items-center md:shrink-0 gap-x-3 lg:gap-x-4 md:gap-x-6'>
-                <img src={import.meta.env.BASE_URL+"/images/club/diamond.png"} className='w-[87px] lg:w-[100px] xl:w-[110px]' alt="coffe club" />
+                <img src={import.meta.env.BASE_URL + "/images/club/diamond.png"} className='w-[87px] lg:w-[100px] xl:w-[110px]' alt="coffe club" />
                 <div>
                   <h4 className='font-MorabbaBold text-2xl md:text-5xl mb-2'>کافی کلاب</h4>
                   <p className='font-MorabbaLight text-lg md:text-2xl'>میدونستی میتونی با امتیاز هات قهوه بگیری ؟</p>
@@ -697,7 +740,7 @@ export default function Home() {
               <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                 {/* item-banner */}
                 <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL+"/images/blogs/blog-1.png"} alt="blog-1" />
+                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-1.png"} alt="blog-1" />
                   <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
                     <svg className='w-[138px] h-[54px] text-amber-900'>
                       <use href="#logo-type"></use>
@@ -730,7 +773,7 @@ export default function Home() {
               <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                 {/* item-banner */}
                 <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL+"/images/blogs/blog-2.png"} alt="blog-2" />
+                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-2.png"} alt="blog-2" />
                   <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
                     <svg className='w-[138px] h-[54px] text-amber-900'>
                       <use href="#logo-type"></use>
@@ -763,7 +806,7 @@ export default function Home() {
               <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                 {/* item-banner */}
                 <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL+"/images/blogs/blog-3.png"} alt="blog-3" />
+                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-3.png"} alt="blog-3" />
                   <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
                     <svg className='w-[138px] h-[54px] text-amber-900'>
                       <use href="#logo-type"></use>
@@ -796,7 +839,7 @@ export default function Home() {
               <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
                 {/* item-banner */}
                 <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL+"/images/blogs/blog-4.png"} alt="blog-4" />
+                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-4.png"} alt="blog-4" />
                   <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
                     <svg className='w-[138px] h-[54px] text-amber-900'>
                       <use href="#logo-type"></use>
@@ -832,7 +875,7 @@ export default function Home() {
         <section className="contact-us mb-16 md:mb-28">
           <div className="container">
             <div className="flex flex-col lg:flex-row items-center  lg:items-start gap-y-8 lg:gap-x-5">
-              <img src={import.meta.env.BASE_URL+"/images/contact.png"} className="w-[296px] shrink-0" alt="contact" />
+              <img src={import.meta.env.BASE_URL + "/images/contact.png"} className="w-[296px] shrink-0" alt="contact" />
               <div className='text-zinc-700 dark:text-white'>
                 <h3 className='font-MorabbaMedium text-2xl md:text-5xl mb-0.5 md:mb-1.5'>یکی از بهترین قهوه ها !</h3>
                 <span className='font-MorabbaLight text-lg md:text-3xl/[48px]'>کیفیت قهوه را از ما بخواهید ...</span>
