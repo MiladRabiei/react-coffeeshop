@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react'
+import React, { useRef, useEffect,useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -11,11 +11,17 @@ import moment from 'jalali-moment';
 import useFetch from '../../hooks/useFetch';
 import CircleSpinner from '../../Components/CircleSpinner/CircleSpinner';
 import Typewriter from 'typewriter-effect'
+import Article from '../../Components/Article/Article';
 
 export default function Home() {
   let [mainData, loading] = useFetch("/products")
+  let [articlesData,isLoading]=useFetch("/articles")
+  let [productLength,setProductLength]=useState()
+  let [articlesLength,setArticleLength]=useState()
   let [products, setProducts] = useState([])
   let [randomNumbers, setRandomNumbers] = useState([])
+  let [aticleRandomNum,setArticleRandomNum]=useState()
+  let [articles,setArticles]=useState()
   const nextButtonRef = useRef(null);
   const prevButtonRef = useRef(null);
   const swiperRef = useRef(null);
@@ -34,28 +40,41 @@ export default function Home() {
 
 
   useEffect(() => {
-    let numArray = new Set()
-    for (let i = 0; numArray.size < 8; i++) {
-      const number = Math.floor(Math.random() * 20);
-      numArray.add(number)
-    }
-    setRandomNumbers([...numArray])
-  }, []);
-
+    setProductLength(mainData?.length);
+    setArticleLength(articlesData?.length);
+  }, [mainData, articlesData]);
 
   useEffect(() => {
-    let productArray = []
-    randomNumbers?.forEach(num => {
-      mainData?.forEach((item, index) => {
-        if (index === num) {
-          productArray.push(item)
-        }
-      })
-    })
+    if(!productLength) return
+    let numArray= new Set()
+    while ( numArray.size < 8) {
+      numArray.add(Math.floor(Math.random() * (productLength)))
+    }
+
+    setRandomNumbers([...numArray])
+    
+  }, [productLength]);
+
+  useEffect(() => {
+    if(!articlesLength) return
+    let articleIndex = new Set()
+    while (articleIndex.size < 4) {
+      articleIndex.add(Math.floor(Math.random() * (articlesLength)))
+    }
+    setArticleRandomNum([...articleIndex])
+  }, [articlesLength]);
+
+  useEffect(() => {
+    if(loading)return;
+    let productArray = randomNumbers?.map(num =>mainData[num])
     setProducts(productArray)
-  }, [mainData, randomNumbers])
-
-
+  }, [mainData, randomNumbers,loading])
+  useEffect(() => {
+    if(isLoading)return;
+    let articleArray = aticleRandomNum?.map(num =>articlesData[num])
+    console.log(articleArray);
+    setArticles(articleArray)
+  }, [articlesData, aticleRandomNum,isLoading])
 
 
   return (
@@ -737,137 +756,17 @@ export default function Home() {
             {/* section body */}
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-5">
               {/* section-item */}
-              <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
-                {/* item-banner */}
-                <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-1.png"} alt="blog-1" />
-                  <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
-                    <svg className='w-[138px] h-[54px] text-amber-900'>
-                      <use href="#logo-type"></use>
-                    </svg>
-                  </div>
-                </div>
-                {/* item-caption */}
-                <div className='w-full flex flex-col sm:flex-row items-start justify-between'>
-                  <NavLink className='font-DanaMedium md:font-Dana text-sm/7 line-clamp-2 lg:text-lg ml-1.5 sm:ml-0 mt-2.5 sm:mt-0  md:max-w-[193px] text-zinc-700 dark:text-white '>طرز تهیه قهوه دمی با دستگاه اروپرس</NavLink>
-                  <div className='hidden sm:flex gap-5'>
-                    <span className="hidden lg:block w-px h-[61px] bg-gray-100 dark:bg-white/10 "></span>
-                    <div className='flex flex-col ml-3 lg:ml-[18px] -mt-1 text-teal-600 dark:text-emerald-500 text-sm text-left '>
-                      <span className='font-DanaDemiBold md:text-xl lg:text-2xl '>21</span>
-                      <span>مرداد</span>
-                      <span>1402</span>
-                    </div>
-                  </div>
-                  <div className="flex items-end justify-between w-full sm:hidden border-t border-gray-100 dark:border-t-white/10 pt-[18px] pb-1.5 ">
-                    <span className='text-teal-600 dark:text-emerald-500 text-xs'>21 مرداد 1402</span>
-                    <NavLink className="flex items-center gap-x-1 ml-1.5 font-DanaMedium text-xs h-5 rounded-md pr-2.5 pl-2 bg-orange-200/20 text-orange-300">
-                      مطالعه
-                      <svg className='w-3.5 h-3.5'>
-                        <use href='#arrow-left'></use>
-                      </svg>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              {/* section-item */}
-              <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
-                {/* item-banner */}
-                <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-2.png"} alt="blog-2" />
-                  <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
-                    <svg className='w-[138px] h-[54px] text-amber-900'>
-                      <use href="#logo-type"></use>
-                    </svg>
-                  </div>
-                </div>
-                {/* item-caption */}
-                <div className='w-full flex flex-col sm:flex-row items-start justify-between'>
-                  <NavLink className='font-DanaMedium md:font-Dana text-sm/7 line-clamp-2 lg:text-lg ml-1.5 sm:ml-0 mt-2.5 sm:mt-0  md:max-w-[193px] text-zinc-700 dark:text-white '>یک نوشیدنی هیجان انگیز و پرکالری برای شروع روز</NavLink>
-                  <div className='hidden sm:flex gap-5'>
-                    <span className="hidden lg:block w-px h-[61px] bg-gray-100 dark:bg-white/10 "></span>
-                    <div className='flex flex-col ml-3 lg:ml-[18px] -mt-1 text-teal-600 dark:text-emerald-500 text-sm text-left '>
-                      <span className='font-DanaDemiBold md:text-xl lg:text-2xl '>21</span>
-                      <span>مرداد</span>
-                      <span>1402</span>
-                    </div>
-                  </div>
-                  <div className="flex items-end justify-between w-full sm:hidden border-t border-gray-100 dark:border-t-white/10 pt-[18px] pb-1.5 ">
-                    <span className='text-teal-600 dark:text-emerald-500 text-xs'>21 مرداد 1402</span>
-                    <NavLink className="flex items-center gap-x-1 ml-1.5 font-DanaMedium text-xs h-5 rounded-md pr-2.5 pl-2 bg-orange-200/20 text-orange-300">
-                      مطالعه
-                      <svg className='w-3.5 h-3.5'>
-                        <use href='#arrow-left'></use>
-                      </svg>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              {/* section-item */}
-              <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
-                {/* item-banner */}
-                <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-3.png"} alt="blog-3" />
-                  <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
-                    <svg className='w-[138px] h-[54px] text-amber-900'>
-                      <use href="#logo-type"></use>
-                    </svg>
-                  </div>
-                </div>
-                {/* item-caption */}
-                <div className='w-full flex flex-col sm:flex-row items-start justify-between'>
-                  <NavLink className='font-DanaMedium md:font-Dana text-sm/7 line-clamp-2 lg:text-lg ml-1.5 sm:ml-0 mt-2.5 sm:mt-0  md:max-w-[193px] text-zinc-700 dark:text-white '>طرز تهیه یک فنجان کافه زینو برزیلی</NavLink>
-                  <div className='hidden sm:flex gap-5'>
-                    <span className="hidden lg:block w-px h-[61px] bg-gray-100 dark:bg-white/10 "></span>
-                    <div className='flex flex-col ml-3 lg:ml-[18px] -mt-1 text-teal-600 dark:text-emerald-500 text-sm text-left '>
-                      <span className='font-DanaDemiBold md:text-xl lg:text-2xl '>21</span>
-                      <span>مرداد</span>
-                      <span>1402</span>
-                    </div>
-                  </div>
-                  <div className="flex items-end justify-between w-full sm:hidden border-t border-gray-100 dark:border-t-white/10 pt-[18px] pb-1.5 ">
-                    <span className='text-teal-600 dark:text-emerald-500 text-xs'>21 مرداد 1402</span>
-                    <NavLink className="flex items-center gap-x-1 ml-1.5 font-DanaMedium text-xs h-5 rounded-md pr-2.5 pl-2 bg-orange-200/20 text-orange-300">
-                      مطالعه
-                      <svg className='w-3.5 h-3.5'>
-                        <use href='#arrow-left'></use>
-                      </svg>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              {/* section-item */}
-              <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
-                {/* item-banner */}
-                <div className='w-[130px] h-[130px] shrink-0  sm:w-auto sm:h-auto relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
-                  <img className='w-full h-full object-cover sm:w-auto sm:h-auto' src={import.meta.env.BASE_URL + "/images/blogs/blog-4.png"} alt="blog-4" />
-                  <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
-                    <svg className='w-[138px] h-[54px] text-amber-900'>
-                      <use href="#logo-type"></use>
-                    </svg>
-                  </div>
-                </div>
-                {/* item-caption */}
-                <div className='w-full flex flex-col sm:flex-row items-start justify-between'>
-                  <NavLink to={"article-info/1"} className='font-DanaMedium md:font-Dana text-sm/7 line-clamp-2 lg:text-lg ml-1.5 sm:ml-0 mt-2.5 sm:mt-0  md:max-w-[193px] text-zinc-700 dark:text-white '>طرز تهیه قهوه دالگونا مناسب روز‌های کرونایی</NavLink>
-                  <div className='hidden sm:flex gap-5'>
-                    <span className="hidden lg:block w-px h-[61px] bg-gray-100 dark:bg-white/10 "></span>
-                    <div className='flex flex-col ml-3 lg:ml-[18px] -mt-1 text-teal-600 dark:text-emerald-500 text-sm text-left '>
-                      <span className='font-DanaDemiBold md:text-xl lg:text-2xl '>21</span>
-                      <span>مرداد</span>
-                      <span>1402</span>
-                    </div>
-                  </div>
-                  <div className="flex items-end justify-between w-full sm:hidden border-t border-gray-100 dark:border-t-white/10 pt-[18px] pb-1.5 ">
-                    <span className='text-teal-600 dark:text-emerald-500 text-xs'>21 مرداد 1402</span>
-                    <NavLink className="flex items-center gap-x-1 ml-1.5 font-DanaMedium text-xs h-5 rounded-md pr-2.5 pl-2 bg-orange-200/20 text-orange-300">
-                      مطالعه
-                      <svg className='w-3.5 h-3.5'>
-                        <use href='#arrow-left'></use>
-                      </svg>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
+              {articles?.map(item=>(
+                item.id&&(
+                  <Article
+                key={item?.id}
+                id={item?.id}
+                title={item?.title}
+                src={item?.src}
+                date={item.date}
+                />
+                )
+              ))}
             </div>
           </div>
         </section>

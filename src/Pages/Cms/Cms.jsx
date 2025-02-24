@@ -107,7 +107,7 @@ export default function Cms() {
                                 </svg>
                                 <div className='flex h-full  items-center gap-x-2'>
                                     <span className='text-sm xs:text-base'>
-                                         {authcontext.userInfos.username}
+                                         {authcontext.userInfos?.username}
                                     </span>
                                     <span className="hidden xs:block w-px h-10 bg-orange-300"></span>
                                     <span className='hidden xs:block'>مشتری</span>

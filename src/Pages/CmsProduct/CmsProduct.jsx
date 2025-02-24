@@ -275,8 +275,8 @@ export default function CmsProduct() {
         </thead>
         <tbody className='w-full '>
           {mainData.length>0?(
-            mainData?.map(item=>(
-              <tr className='p-2 flex items-center child:flex child:flex-1 child:justify-center child:items-center child:text-xs child:sm:text-base' key={item.id}>
+            mainData?.map((item,index)=>(
+              <tr className='p-2 flex items-center child:flex child:flex-1 child:justify-center child:items-center child:text-xs child:sm:text-base' key={item.id||index}>
               <td className='w-auto'>
                 <img className='w-full  block' src={import.meta.env.BASE_URL+item.src} alt="" />
               </td>
@@ -294,9 +294,13 @@ export default function CmsProduct() {
             </tr>
             ))
           ):(
-            <div className="flex-center my-10">
+            <tr>
+              <td>
+              <div className="flex-center my-10">
               <h2 className="text-3xl font-MorabbaMedium">هیچ محصولی وجود ندارد!</h2>
             </div>
+              </td>
+            </tr>
           )}
           
           

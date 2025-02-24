@@ -25,7 +25,6 @@ export default function MainProduct() {
   let[count,setCount]=useState(1)
   let params = useParams()
   let location=useLocation()
-  console.log(location.pathname);
   let [mainData,isLoading,refetch] = useFetch("/products")
   let [isMainProductPage,setIsMainProductPage]=useState(location.pathname.includes("/Product-info/"))
   let[fetchComments,setFetchComments]=useState([])
@@ -55,7 +54,6 @@ export default function MainProduct() {
   let increaseCount=(id)=>authContext.increasecount(id)
   let decreaseCount=(id)=>authContext.decreasecount(id)
 
-console.log(mainProduct);
 
 // handling adding comment
 
@@ -595,10 +593,10 @@ let postMutation=useMutation({
                       <CircleSpinner/>
                     ):(
                       <ul className='flex flex-col w-full lg:w-3/4 gap-y-2'>
-                      {fetchComments.length>0&&displayComments?.map(item=>(
-                      <>
+                      {fetchComments.length>0&&displayComments?.map((item,index)=>(
+                      
                         <Comment
-                        key={item.id}
+                        key={item.id||index}
                         id={item.id}
                         title={item.title}
                         suggested={item.suggested}
@@ -609,7 +607,7 @@ let postMutation=useMutation({
                         ProductID={item.ProductID}
                         isapproved={item.isapproved}
                         />
-                      </>
+                      
                       ))}
                         
                         {fetchComments.length>3&&(

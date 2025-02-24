@@ -145,6 +145,18 @@
     @apply bg-orange-200 z-0 top-0;
 
   }
+  .article h2{
+    @apply text-2xl my-4 font-DanaDemiBold text-orange-300
+  }
+  .article h3,h4{
+    @apply text-xl my-2 font-DanaMedium text-orange-200
+  }
+  .article p{
+    @apply my-2
+  }
+  .article ul{
+    @apply my-2 space-y-3
+  }
 }
 @layer utilities{
   .flex-center{

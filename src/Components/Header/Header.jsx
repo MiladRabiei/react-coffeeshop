@@ -75,6 +75,7 @@ export default function Header() {
                     <li className='relative group'>
                         <NavLink to={"/Store"} className={link => link.isActive ? "lgactive group-hover:text-orange-300" : "group-hover:text-orange-300"}>
                             فروشگاه
+                            </NavLink>
                             <ul className='absolute top-full w-52 p-6 space-y-4 text-zinc-700 dark:text-white text-base border-t-[3px] border-t-orange-300 bg-white dark:bg-zinc-700 
     tracking-normal shadow-normal rounded-2xl child:inline-block child:transition-all
         child-hover:text-orange-300 invisible opacity-0 group-hover:opacity-100 group-hover:visible transition-all'>
@@ -109,7 +110,7 @@ export default function Header() {
                                     </NavLink>
                                 </li>
                             </ul>
-                        </NavLink>
+                        
                     </li>
 
                     <li>
