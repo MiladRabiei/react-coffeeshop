@@ -412,16 +412,7 @@ export default function Header() {
                                 </li>
                             </ul>
                         </li>
-                        <li className='mobileMenu_links flex items-center justify-between'>
-                            <NavLink to={"/Dictionary"} className={link => link.isActive ? "mdactive" : ""}>
-                                <span className='flex items-center gap-x-2'>
-                                    <svg className='w-5 h-5'>
-                                        <use href='#chat'></use>
-                                    </svg>
-                                    دیکشنری
-                                </span>
-                            </NavLink>
-                        </li>
+                        
                         <li className='mobileMenu_links flex items-center justify-between'>
                             <NavLink to={"/About-us"} className={link => link.isActive ? "mdactive" : ""}>
                                 <span className='flex items-center gap-x-2'>

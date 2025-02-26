@@ -49,7 +49,7 @@ export default function Blog() {
   useEffect(()=>{
     let start=currentPage*itemPerPage-itemPerPage
     let end=start+itemPerPage
-    setDisplayArticles(mainData.slice(start,end))
+    setDisplayArticles(mainData.slice(start,end).reverse())
   },[currentPage,itemPerPage,mainData]) 
 
   useEffect(()=>{
@@ -70,6 +70,10 @@ export default function Blog() {
         </Link>)
     }
     return btns
+  }
+  let clearFilter=()=>{
+    setFilters({sortBy:""})
+    setActive("")
   }
   return (
     <section className="store mt-8 md:mt-40">
@@ -97,9 +101,14 @@ export default function Blog() {
               </svg>
               مرتب سازی بر اساس :
             </span>
-            <div className='flex items-center gap-x-3 lg:gap-x-5 child:text-sm child:lg:text-base cursor-pointer'>
+            <div className='flex flex-1 items-center gap-x-3 lg:gap-x-5 child:text-sm child:lg:text-base cursor-pointer'>
               <span className={`${active==="جدید ترین"?"text-orange-300":""}`} onClick={()=>{handleCategoryFilter("جدید ترین")}}>جدید ترین</span>
               <span className={`${active==="قدیمی ترین"?"text-orange-300":""}`} onClick={()=>{handleCategoryFilter("قدیمی ترین")}}>قدیمی ترین</span>              
+                <span className='text-orange-300 flex flex-1 justify-end' onClick={clearFilter}>
+                  <svg className='w-5 h-5'>
+                    <use href='#trash'></use>
+                  </svg>
+                </span>
             </div>
           </div>
           {isLoading?(
