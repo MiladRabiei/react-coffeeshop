@@ -25,7 +25,7 @@ export default function Mainarticle() {
           links={
             [
               { id: 1, to: "/Home", title: "صفحه اصلی" },
-              { id: 2, to: "/articles", title: "بلاگ " },
+              { id: 2, to: "/blog", title: "بلاگ " },
               { id: 3, to: `/article-info/${params.articleID}`, title: "مقاله" },
             ]
           }

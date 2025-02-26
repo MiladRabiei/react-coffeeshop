@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 export default function Article(props) {
+  console.log(props.date);
   let parts=props.date.split(" ")
 
   return (
@@ -26,8 +27,8 @@ export default function Article(props) {
                             </div>
                           </div>
                           <div className="flex items-end justify-between w-full sm:hidden border-t border-gray-100 dark:border-t-white/10 pt-[18px] pb-1.5 ">
-                            <span className='text-teal-600 dark:text-emerald-500 text-xs'>21 مرداد 1402</span>
-                            <Link className="flex items-center gap-x-1 ml-1.5 font-DanaMedium text-xs h-5 rounded-md pr-2.5 pl-2 bg-orange-200/20 text-orange-300">
+                            <span className='text-teal-600 dark:text-emerald-500 text-xs'>{props.date}</span>
+                            <Link to={`/article-info/${props.id}`} className="flex items-center gap-x-1 ml-1.5 font-DanaMedium text-xs h-5 rounded-md pr-2.5 pl-2 bg-orange-200/20 text-orange-300">
                               مطالعه
                               <svg className='w-3.5 h-3.5'>
                                 <use href='#arrow-left'></use>

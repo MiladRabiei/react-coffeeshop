@@ -36,6 +36,7 @@ let routes = [
     { path:"/checkout",element:<CheckOut/>},
     { path: "/about-us", element: <AboutUs /> },
     { path: "/blog", element: <Blog /> },
+    { path: "/blog/:pageID", element: <Blog /> },
     { path: "/contact-us", element: <ContactUs /> },
     { path: "/product-info/:ProductID", element: <MainProduct /> },
     { path: "/login", element: <LoginAndRegister /> },
