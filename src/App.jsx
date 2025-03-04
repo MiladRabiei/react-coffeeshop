@@ -7,6 +7,7 @@ import AuthContext from './Context/AuthContext'
 import useFetch from './hooks/useFetch'
 import apiRequests from './services/axios/Configs/configs'
 import { useMutation } from '@tanstack/react-query'
+import ScrollToTop from './Components/ScrollToTop/ScrollToTop'
 export default function App() {
   let Router = useRoutes(routes)
   let location = useLocation()
@@ -404,7 +405,7 @@ export default function App() {
         </svg>
         <div >
           {(!isCmsPage && !is403Page && !isUserPanel) && <Header />}
-
+          <ScrollToTop/>
           {Router} {/* Render the routes */}
 
           {(!isCmsPage && !is403Page && !isUserPanel) && <Footer />}
