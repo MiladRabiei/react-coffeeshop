@@ -51,6 +51,7 @@ export default function Input(props) {
     let element=props.elem==="input"?(
         <input
          type={props.type}
+         name={props.id}
          placeholder={props.placeholder}
          className={`${props.className+" text-zinc-700"} ${mainInput.value.length===0?"border-transparent":mainInput.isValid?" border-emerald-500":" border-red-500"}`}
          value={mainInput.value}
@@ -65,10 +66,10 @@ export default function Input(props) {
         <textarea
         placeholder={props.placeholder}
         className={props.className}
-        onChange={changeHandler}
+        onChange={(event)=>changeHandler(event)}
         value={mainInput.value}
-        name=""
-         id="">
+        name={props.id}
+        >
         </textarea>
     )
   return (

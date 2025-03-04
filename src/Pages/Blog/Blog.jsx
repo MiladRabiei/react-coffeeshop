@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import BreadCrumb from '../../Components/BreadCrumb/BreadCrumb';
 import { useRef,useState,useEffect } from 'react';
 import useFetch from '../../hooks/useFetch';
@@ -34,10 +34,11 @@ export default function Blog() {
 
       // category filter
 
-  let handleCategoryFilter=(filterName)=>{
+  let handleCategoryFilter=useCallback((filterName)=>{
     setFilters(prevFilters=>({...prevFilters,sortBy:filterName}))
     setActive(filterName)
-  }
+  },[setActive])
+  
   useEffect(()=>{
     setCurrentPage(1)
   },[])
@@ -65,7 +66,7 @@ export default function Blog() {
   let pagination=()=>{
     const btns=[]
     for(let i=1;i<=pageCount;i++){
-      btns.push(<Link to={`/blog/${i}`} onClick={()=>handleCurrentPage(i)} className={`flex-center border dark:text-white  dark:border-gray-100 child:text-center w-10 h-10 rounded-md ${currentPage===i?"bg-orange-300 text-white border-orange-400":"bg-none text-zinc-700 border-zinc-700"}`}>
+      btns.push(<Link key={i} to={`/blog/${i}`} onClick={()=>handleCurrentPage(i)} className={`flex-center border dark:text-white  dark:border-gray-100 child:text-center w-10 h-10 rounded-md ${currentPage===i?"bg-orange-300 text-white border-orange-400":"bg-none text-zinc-700 border-zinc-700"}`}>
         <span>{i}</span>
         </Link>)
     }
@@ -118,9 +119,9 @@ export default function Blog() {
           ):(
           <>
           {/* products */}
-          <div className='mt-4  grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3.5 md:gap-5  '>
+          <div className='mt-4  grid xs:grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3.5 md:gap-5  '>
           {(filters.sortBy
-            ? displayFilteredArticlesPagination : displayArticles).map(item => (
+            ? displayFilteredArticlesPagination : displayArticles).map((item) => (
               <Article
               key={item?.id}
               id={item?.id}
@@ -132,7 +133,7 @@ export default function Blog() {
             ))}
             
         </div>
-        <div className={` my-8 gap-x-2 flex-center`}>
+        <div  className={` my-8 gap-x-2 flex-center`}>
               {pagination()}
             </div>
           </>

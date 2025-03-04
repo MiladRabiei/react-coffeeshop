@@ -1,4 +1,4 @@
-import React, { useRef, useEffect,useState } from 'react'
+import React, { useRef, useEffect,useState, useMemo } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -361,7 +361,7 @@ export default function Home() {
             <SectionHeader
               title="مطالب خواندنی"
               btn={
-                <Link className="section-link ">
+                <Link to={'/blog'} className="section-link ">
                   <span className='hidden md:inline-block'>مشاهده همه مطالب</span>
                   <span className='inlin-block md:hidden'>مشاهده همه </span>
                   <svg className='w-5 h-5'>

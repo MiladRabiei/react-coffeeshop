@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import apiRequests from '../services/axios/Configs/configs'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import CircleSpinner from '../Components/CircleSpinner/CircleSpinner'
 
 export default function useFetch(url) {
     let queryClient=useQueryClient()
@@ -21,8 +20,6 @@ export default function useFetch(url) {
     }
     })
     
-    console.log(isLoading);
-
       return [data??[],isLoading,refetch]
 }
 

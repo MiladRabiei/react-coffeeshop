@@ -1,15 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-export default function Article(props) {
+import React,{memo} from 'react'
+import { Link, useLocation } from 'react-router-dom'
+export default memo(function Article(props) {
   console.log(props.date);
   let parts=props.date.split(" ")
-
+  let location=useLocation()
+  let isBlogPage=location.pathname==="/blog"
   return (
-    <div className='flex sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl'>
+    <div className={`flex ${isBlogPage?"xs:flex-col":""} sm:block gap-x-2.5 group p-2.5 md:pb-2 bg-white dark:bg-zinc-700 shadow-normal rounded-2xl`}>
                         {/* item-banner */}
-                        <div className='w-[130px] h-[130px] shrink-0  flex flex-grow sm:w-auto sm:h-[141px] lg:h-[190px] relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden'>
+                        <div className={` ${isBlogPage?"w-[130px] h-[130px] xs:w-auto":"w-[130px] h-[130px]"} shrink-0  flex flex-grow sm:w-auto sm:h-[141px] lg:h-[190px] relative sm:mb-4 rounded-2xl rounded-bl-4xl overflow-hidden`}>
                           <img className='w-full h-full object-cover sm:w-auto sm:h-auto ' src={import.meta.env.BASE_URL +props.src}  />
-                          <div className='absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100'>
+                          <div className={`absolute inset-0 w-full h-full hidden invisible opacity-0 group-hover:opacity-100 group-hover:visible md:flex-center bg-gradient-to-r from-orange-200/80 to-orange-300/80 transition-all delay-100`}>
                             <svg className='w-[138px] h-[54px] text-amber-900'>
                               <use href="#logo-type"></use>
                             </svg>
@@ -38,4 +39,4 @@ export default function Article(props) {
                         </div>
                   </div>
   )
-}
+})

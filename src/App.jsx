@@ -156,27 +156,7 @@ export default function App() {
     localStorage.removeItem('shopbox')
 
   }
-  let increasecount = (id) => {
-    let shopbox = JSON.parse(localStorage.getItem('shopbox'))
-    shopbox.map(item => {
-      if (item.id === id) {
-        item.ordercount++
-      }
-    })
-    localStorage.setItem('shopbox', JSON.stringify(shopbox))
-    setShopBasket(shopbox)
-  }
-  let decreasecount = (id) => {
-    let shopbox = JSON.parse(localStorage.getItem('shopbox'))
-    shopbox.map(item => {
-      if (item.id === id) {
-        item.ordercount--
-      }
-    })
-    localStorage.setItem('shopbox', JSON.stringify(shopbox))
-    setShopBasket(shopbox)
-  }
-  console.log(isLoggedIn);
+
   return (
     <>
       <AuthContext.Provider
@@ -195,8 +175,6 @@ export default function App() {
           removefromfavorites,
           removefromshopbox,
           emptyshopbox,
-          increasecount,
-          decreasecount
         }}
       >
         {/* all svgs */}
