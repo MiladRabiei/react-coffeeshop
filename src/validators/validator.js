@@ -16,7 +16,8 @@ export default function validator(value,validations) {
             value.trim().length > validator.max && validationResult.push(false)
         }
         if(validator.value===rules.emailValue){
-            !value.trim().includes('@') && validationResult.push(false)
+            let emailTest=/^\w+([\.-]?\w)*@\w{3,6}\.\w{3,5}$/
+            !emailTest.test(value) && validationResult.push(false)
         }
 
         

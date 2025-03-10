@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, NavLink, useParams } from "react-router-dom"
+import { Link, NavLink, useLocation, useParams } from "react-router-dom"
 import AuthContext from '../../Context/AuthContext';
 export default function Header() {
 
     let authContext = useContext(AuthContext)
     let [darkMode, setDarkMode] = useState(false)
-    
+    let {pathname}=useLocation()
     let changeThemeColor = () => {
         setDarkMode((prev) => {
             const newMode = !prev;
@@ -51,7 +51,10 @@ export default function Header() {
         document.getElementById("cart").classList.add("left-0")
         document.querySelector(".overlay").classList.remove('hidden')
     }
-
+    useEffect(()=>{
+        closeCartMenu()
+        closeMobileMenu()
+    },[pathname])
     let removeFromShopBox=(id)=>authContext.removefromshopbox(id)
     let increaseCount=(id)=>authContext.increasecount(id)
     let decreaseCount=(id)=>authContext.decreasecount(id)
