@@ -450,14 +450,14 @@ export default function Header() {
                     {/* nav-footer */}
                     <div className="py-8 mt-6 space-y-6 px-2.5 border-t border-t-gray-100 dark:border-t-white/10  text-orange-300">
                         {!authContext.isLoggedIn?(
-                            <NavLink to={"/Login"} className="inline-flex items-center gap-x-2">
+                            <NavLink to={"/Login"} className="flex items-center gap-x-2">
                                 <svg className='w-5 h-5'>
                                     <use href='#arrow-right'></use>
                                 </svg>
                                 ورود | ثبت نام
                             </NavLink>
                         ):(
-                            <NavLink to={"/userpanel/dashboard"} className="inline-flex items-center gap-x-2 " >
+                            <NavLink to={"/userpanel/dashboard"} className="flex items-center gap-x-2 " >
                             <svg className='w-5 h-5'>
                                 <use xlinkHref='#person'></use>
                             </svg>
@@ -465,7 +465,7 @@ export default function Header() {
                         </NavLink>
                         )}
                         {authContext.userInfos&&authContext.userInfos.role === "admin"&&(
-                            <NavLink to="Cms/products" className="inline-flex items-center gap-x-2 ">
+                            <NavLink to="Cms/products" className="flex items-center gap-x-2 ">
                             <svg className='w-5 h-5'>
                                 <use href='#desktop'></use>
                             </svg>
@@ -473,20 +473,20 @@ export default function Header() {
                         </NavLink>
                         )}
                         <div>
-                            <span className="inline-flex  items-center gap-x-2 dark:hidden cursor-pointer" onClick={changeThemeColor}>
+                            <span className="flex  items-center gap-x-2 dark:hidden cursor-pointer" onClick={changeThemeColor}>
                                 <svg className='w-5 h-5'>
                                     <use href='#moon'></use>
                                 </svg>
                                 تم تیره
                             </span>
-                            <span className="hidden dark:inline-flex items-center gap-x-2 cursor-pointer" onClick={changeThemeColor}>
+                            <span className="hidden dark:flex items-center gap-x-2 cursor-pointer" onClick={changeThemeColor}>
                                 <svg className='w-5 h-5'>
                                     <use href='#sun'></use>
                                 </svg>
                                 تم روشن
                             </span>
                         </div>
-                        <NavLink to={"/shop"} className="inline-flex items-center gap-x-2 ">
+                        <NavLink to={"/shop"} className="flex items-center gap-x-2 ">
                             <svg className='w-5 h-5'>
                                 <use href='#shopping-cart'></use>
                             </svg>
