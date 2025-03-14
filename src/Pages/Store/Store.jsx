@@ -58,9 +58,13 @@ console.log(isLoading);
           const matchesAvailability = !isChecked || product.count > 0;
         return matchesCategory && matchesBrand && matchesCaffeineLevel&&matchesAvailability;
       });
-  
-  
-        let sortedProducts=newFilteredProducts?.length>0?[...newFilteredProducts]:[...mainData]
+        let sortedProducts
+        filters.sortBy.length>0?(
+        sortedProducts=newFilteredProducts?.length>0?[...newFilteredProducts]:[...mainData]
+
+        ):(
+          sortedProducts=[...newFilteredProducts]
+        )
       if(filters.sortBy==="محبوب ترین"){
         sortedProducts=sortedProducts.sort((a,b)=>b.reviews-a.reviews||a.id-b.id)
       }else if(filters.sortBy==="پرفروش ترین"){
